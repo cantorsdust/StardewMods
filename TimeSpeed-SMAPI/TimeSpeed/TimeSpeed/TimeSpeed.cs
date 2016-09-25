@@ -173,8 +173,8 @@ namespace TimeSpeed
         {
             //Console.WriteLine("Key Pressed: " + e.KeyPressed.ToString());
 
-            // N toggles freeze time override, freezing time everywhere.  hitting it again restores old values.
-            if (e.KeyPressed.ToString().Equals("N"))
+			// Default N toggles freeze time override, freezing time everywhere.  hitting it again restores old values.
+			if (e.KeyPressed.ToString().Equals(TimeSpeedConfig.TimeFreezeOverrideKey))
             {
                 if (!TimeFreezeOverride)
                 {
@@ -194,22 +194,22 @@ namespace TimeSpeed
                     TimeSpeedConfig.FreezeTimeInMines = oldFreezeTimeInMines;
                 }
             }
-            // , halves current tick lengths
-            else if (e.KeyPressed.ToString().Equals("OemComma"))
+            // Default , halves current tick lengths
+			else if (e.KeyPressed.ToString().Equals(TimeSpeedConfig.HalfTimeTickLengthKey))
             {
                 TimeSpeedConfig.OutdoorTickLength = (TimeSpeedConfig.OutdoorTickLength / 2);
                 TimeSpeedConfig.IndoorTickLength = (TimeSpeedConfig.IndoorTickLength / 2);
                 TimeSpeedConfig.MineTickLength = (TimeSpeedConfig.MineTickLength / 2);
             }
-            // . doubles current tick lengths
-            else if (e.KeyPressed.ToString().Equals("OemPeriod"))
+            // Default . doubles current tick lengths
+			else if (e.KeyPressed.ToString().Equals(TimeSpeedConfig.DoubleTimeTickLengthKey))
             {
                 TimeSpeedConfig.OutdoorTickLength = (TimeSpeedConfig.OutdoorTickLength * 2);
                 TimeSpeedConfig.IndoorTickLength = (TimeSpeedConfig.IndoorTickLength * 2);
                 TimeSpeedConfig.MineTickLength = (TimeSpeedConfig.MineTickLength * 2);
             }
-            // / restores tick lengths to the original ini values
-            else if (e.KeyPressed.ToString().Equals("B"))
+            // Default B restores tick lengths to the original ini values
+			else if (e.KeyPressed.ToString().Equals(TimeSpeedConfig.RestoreTimeTickLengthKey))
             {
                 TimeSpeedConfig = TimeSpeedConfig.ReloadConfig();
             }
@@ -227,6 +227,10 @@ namespace TimeSpeed
         public bool FreezeTimeInMines { get; set; }
         public bool LetMachinesRunWhileTimeFrozen { get; set; }
         public bool FreezeTimeAt1230AM { get; set; }
+		public string TimeFreezeOverrideKey { get; set; }
+		public string HalfTimeTickLengthKey { get; set; }
+		public string DoubleTimeTickLengthKey { get; set; }
+		public string RestoreTimeTickLengthKey { get; set; }
 
         public override T GenerateDefaultConfig<T>()
         {
@@ -239,6 +243,10 @@ namespace TimeSpeed
             FreezeTimeInMines = false;
             LetMachinesRunWhileTimeFrozen = false;
             FreezeTimeAt1230AM = false;
+			TimeFreezeOverrideKey = "N";
+			HalfTimeTickLengthKey = "OemComma";
+			DoubleTimeTickLengthKey = "OemPeriod";
+			RestoreTimeTickLengthKey = "B";
 
             return this as T;
         }
