@@ -15,12 +15,16 @@ crops in any season, including winter:
 
 ## Use
 * Install the mod and run once to generate config file. 
-* Set "WinterAliveEnabled" to false to kill crops in winter.
-* Set "WinterHoeSnow" to false to enable dirt overlay in winter. (Harder to see when watered)
 * You'll be able to plant and harvest crops in any season,
 and your crops will be saved each night. 
 * This mod does _not_ change store inventories, so you can
 only buy crop seeds during their usual seasons.
+
+setting | effect
+:------ | :-----
+'WinterAliveEnabled' | Enable/Disable the death of crops in the winter. (Default True)
+'WinterHoeSnow' | Enable/Disable non-winter hoe dirt overlay in winter. (Default False)
+
 
 
 ## Compatibility
