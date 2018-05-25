@@ -1,5 +1,5 @@
 # Release notes
-##1.7
+## 1.7
 * Added config files to turn on winter death and non-winter sprites.
 
 ## 1.6
