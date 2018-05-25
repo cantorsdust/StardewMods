@@ -15,6 +15,7 @@ namespace AllCropsAllSeasons
     /// <summary>The entry class called by SMAPI.</summary>
     internal class ModEntry : Mod, IAssetEditor
     {
+        private ModConfig Config;
         /*********
         ** Properties
         *********/
@@ -29,6 +30,7 @@ namespace AllCropsAllSeasons
         /// <param name="helper">Provides simplified APIs for writing mods.</param>
         public override void Entry(IModHelper helper)
         {
+            this.Config = helper.ReadConfig<ModConfig>();
             PlayerEvents.Warped += this.PlayerEvents_Warped;
             SaveEvents.BeforeSave += this.SaveEvents_BeforeSave;
         }
@@ -46,7 +48,7 @@ namespace AllCropsAllSeasons
         /// <param name="asset">A helper which encapsulates metadata about an asset and enables changes to it.</param>
         public void Edit<T>(IAssetData asset)
         {
-            // change crop seasons
+            // change crop seasons; based on user config
             if (asset.AssetNameEquals("Data/Crops"))
             {
                 asset
@@ -54,13 +56,15 @@ namespace AllCropsAllSeasons
                     .Set((id, data) =>
                     {
                         string[] fields = data.Split('/');
-                        fields[1] = "spring summer fall winter";
+                        if (!this.Config.WinterAliveEnabled)
+                            fields[1] = "spring summer fall";
+                        else fields[1] = "spring summer fall winter";
                         return string.Join("/", fields);
                     });
             }
 
             // change dirt texture
-            else if (asset.AssetNameEquals("TerrainFeatures/hoeDirtSnow"))
+            else if (asset.AssetNameEquals("TerrainFeatures/hoeDirtSnow") && this.Config.WinterHoeSnow) //Allows users to set plowed snow or dirt in winter
                 asset.ReplaceWith(this.Helper.Content.Load<Texture2D>("TerrainFeatures/hoeDirt", ContentSource.GameContent));
         }
 
@@ -71,6 +75,7 @@ namespace AllCropsAllSeasons
         /****
         ** Event handlers
         ****/
+
         /// <summary>The method called when the player warps to a new location.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
@@ -87,6 +92,9 @@ namespace AllCropsAllSeasons
         /// <param name="e">The event arguments.</param>
         private void SaveEvents_BeforeSave(object sender, EventArgs e)
         {
+            //If winter is disabled by user, do not restore crops thus game acting natively
+            //If not winter, mod acts normal
+            if (this.Config.WinterAliveEnabled || Game1.currentSeason != "winter") 
             // before save (but after tomorrow's day updates), fix any crops that died due to the day update
             this.RestoreCrops();
         }
@@ -133,12 +141,12 @@ namespace AllCropsAllSeasons
                         dirt.state.Value = saved.State;
                     dirt.fertilizer.Value = saved.Fertilizer;
                     dirt.crop = saved.Crop;
-                    dirt.crop.dead.Value = false;
+                   dirt.crop.dead.Value = false;
                     dirt.dayUpdate(greenhouse, saved.Tile);
                 }
             }
         }
-
+        
         /// <summary>Get all tiles on the farm with a live crop.</summary>
         /// <param name="farm">The farm to search.</param>
         private IEnumerable<CropTileState> GetCropTiles(Farm farm)

@@ -1,4 +1,7 @@
 # Release notes
+##1.7
+*Added config files to turn on winter death and non-winter sprites.
+
 ## 1.6
 * Updated to Stardew Valley 1.3 (including multiplayer).
 

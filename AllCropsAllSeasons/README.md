@@ -17,6 +17,9 @@ crops in any season, including winter:
 Just install the mod and play the game. You'll be able to plant and harvest crops in any season,
 and your crops will be saved each night. This mod does _not_ change store inventories, so you can
 only buy crop seeds during their usual seasons.
+Run once to generate config.json.
+"WinterAliveEnabled" set to false to kill crops in winter.
+"WinterHoeSnow" set to false will enable dirt overlay in winter.
 
 ## Compatibility
 * Works with Stardew Valley 1.3 beta on Linux/Mac/Windows.
