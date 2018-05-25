@@ -94,8 +94,8 @@ namespace AllCropsAllSeasons
         {
             //If winter is disabled by user, do not restore crops thus game acting natively
             //If not winter, mod acts normal
-            if (this.Config.WinterAliveEnabled || Game1.currentSeason != "winter") 
-            // before save (but after tomorrow's day updates), fix any crops that died due to the day update
+            if (this.Config.WinterAliveEnabled || Game1.currentSeason != "winter")
+                // before save (but after tomorrow's day updates), fix any crops that died due to the day update
                 this.RestoreCrops();
         }
 
@@ -141,12 +141,12 @@ namespace AllCropsAllSeasons
                         dirt.state.Value = saved.State;
                     dirt.fertilizer.Value = saved.Fertilizer;
                     dirt.crop = saved.Crop;
-                   dirt.crop.dead.Value = false;
+                    dirt.crop.dead.Value = false;
                     dirt.dayUpdate(greenhouse, saved.Tile);
                 }
             }
         }
-        
+
         /// <summary>Get all tiles on the farm with a live crop.</summary>
         /// <param name="farm">The farm to search.</param>
         private IEnumerable<CropTileState> GetCropTiles(Farm farm)
@@ -168,7 +168,7 @@ namespace AllCropsAllSeasons
             foreach (GiantCrop giantCrop in farm.resourceClumps.OfType<GiantCrop>())
             {
                 Vector2 tile = giantCrop.tile.Value;
-                
+
                 yield return tile; // top left tile
                 yield return tile + new Vector2(1, 0);
                 yield return tile + new Vector2(0, 1);
