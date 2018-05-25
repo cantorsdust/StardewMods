@@ -96,7 +96,7 @@ namespace AllCropsAllSeasons
             //If not winter, mod acts normal
             if (this.Config.WinterAliveEnabled || Game1.currentSeason != "winter") 
             // before save (but after tomorrow's day updates), fix any crops that died due to the day update
-            this.RestoreCrops();
+                this.RestoreCrops();
         }
 
         /****
