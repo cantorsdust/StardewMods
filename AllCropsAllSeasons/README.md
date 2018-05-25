@@ -11,15 +11,17 @@ crops in any season, including winter:
 ## Install
 1. [Install the latest version of SMAPI](https://smapi.io).
 2. Install [this mod from Nexus mods](https://www.nexusmods.com/stardewvalley/mods/170).
-4. Run the game using SMAPI.
+3. Run the game using SMAPI.
 
 ## Use
-Just install the mod and play the game. You'll be able to plant and harvest crops in any season,
-and your crops will be saved each night. This mod does _not_ change store inventories, so you can
+* Install the mod and run once to generate config file. 
+* Set "WinterAliveEnabled" to false to kill crops in winter.
+* Set "WinterHoeSnow" to false to enable dirt overlay in winter. (Harder to see when watered)
+* You'll be able to plant and harvest crops in any season,
+and your crops will be saved each night. 
+* This mod does _not_ change store inventories, so you can
 only buy crop seeds during their usual seasons.
-Run once to generate config.json.
-"WinterAliveEnabled" set to false to kill crops in winter.
-"WinterHoeSnow" set to false will enable dirt overlay in winter.
+
 
 ## Compatibility
 * Works with Stardew Valley 1.3 beta on Linux/Mac/Windows.
