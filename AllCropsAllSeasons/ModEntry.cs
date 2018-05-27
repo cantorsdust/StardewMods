@@ -42,7 +42,6 @@ namespace AllCropsAllSeasons
             this.Config = helper.ReadConfig<ModConfig>();
             PlayerEvents.Warped += this.PlayerEvents_Warped;
             SaveEvents.BeforeSave += this.SaveEvents_BeforeSave;
-            TimeEvents.AfterDayStarted += this.TimeEvents_AfterDayStarted;
         }
 
         /// <summary>Get whether this instance can edit the given asset.</summary>
@@ -127,16 +126,6 @@ namespace AllCropsAllSeasons
         ** Event handlers
         ****/
 
-        /// <summary>The method called after the day starts.</summary>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
-        private void TimeEvents_AfterDayStarted(object sender, EventArgs e)
-        {
-            this.Locations = GetAllLocations().ToArray();
-            if (this.Config.WaterCropSnow && Game1.isSnowing) //If enabled, water crops when snowing
-                this.WaterAllFields(Locations);
-        }
-
         /// <summary>The method called when the player warps to a new location.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
@@ -146,6 +135,10 @@ namespace AllCropsAllSeasons
             // about to end the day
             if (e.NewLocation is FarmHouse)
                 this.StashCrops();
+
+            this.Locations = GetAllLocations().ToArray();
+            if (this.Config.WaterCropSnow && Game1.isSnowing) //If enabled, water crops when snowing
+                this.WaterAllFields(Locations);
         }
 
         /// <summary>The method called when the game is writing to the save file.</summary>
