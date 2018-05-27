@@ -29,8 +29,8 @@ namespace AllCropsAllSeasons
         private GameLocation[] Locations;
         private bool IsLoaded => Context.IsWorldReady && this.Locations != null;
 
-        
-        
+
+
         /*********
         ** Public methods
         *********/
@@ -120,7 +120,7 @@ namespace AllCropsAllSeasons
         {
             this.Locations = GetAllLocations().ToArray();
             if (this.Config.WaterCropSnow && Game1.isSnowing)
-            this.WaterAllFields(Locations);
+                this.WaterAllFields(Locations);
         }
 
         /// <summary>The method called when the player warps to a new location.</summary>
