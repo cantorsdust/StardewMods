@@ -15,14 +15,22 @@ namespace AllCropsAllSeasons
     /// <summary>The entry class called by SMAPI.</summary>
     internal class ModEntry : Mod, IAssetEditor
     {
-        private ModConfig Config;
+
         /*********
         ** Properties
         *********/
         /// <summary>The crop tiles which should be saved for the next day.</summary>
         private CropTileState[] SavedCrops = new CropTileState[0];
 
+        /// <summary>Configuration payload.</summary>
+        private ModConfig Config;
 
+        /// <summary>All Game locations.</summary>
+        private GameLocation[] Locations;
+        private bool IsLoaded => Context.IsWorldReady && this.Locations != null;
+
+        
+        
         /*********
         ** Public methods
         *********/
@@ -33,6 +41,7 @@ namespace AllCropsAllSeasons
             this.Config = helper.ReadConfig<ModConfig>();
             PlayerEvents.Warped += this.PlayerEvents_Warped;
             SaveEvents.BeforeSave += this.SaveEvents_BeforeSave;
+            TimeEvents.AfterDayStarted += this.TimeEvents_AfterDayStarted;
         }
 
         /// <summary>Get whether this instance can edit the given asset.</summary>
@@ -69,12 +78,50 @@ namespace AllCropsAllSeasons
         }
 
 
+        /// <summary>Water All Fields.</summary> //Thanks CJB!
+        public void WaterAllFields(GameLocation[] locations)
+        {
+            foreach (GameLocation location in locations)
+            {
+                if (!location.IsFarm && !location.Name.Contains("Greenhouse"))
+                    continue;
+
+                foreach (TerrainFeature terrainFeature in location.terrainFeatures.Values)
+                {
+                    if (terrainFeature is HoeDirt dirt)
+                        dirt.state.Value = HoeDirt.watered;
+                }
+
+
+            }
+        }
+
+        /// <summary>Get all game locations.</summary> //Thanks CJB!
+        public static IEnumerable<GameLocation> GetAllLocations()
+        {
+            foreach (GameLocation location in Game1.locations)
+            {
+                // current location
+                yield return location;
+            }
+        }
+
         /*********
         ** Private methods
         *********/
         /****
         ** Event handlers
         ****/
+
+        /// <summary>The method called after the day starts.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void TimeEvents_AfterDayStarted(object sender, EventArgs e)
+        {
+            this.Locations = GetAllLocations().ToArray();
+            if (this.Config.WaterCropSnow && Game1.isSnowing)
+            this.WaterAllFields(Locations);
+        }
 
         /// <summary>The method called when the player warps to a new location.</summary>
         /// <param name="sender">The event sender.</param>

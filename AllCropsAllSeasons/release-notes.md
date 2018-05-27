@@ -1,6 +1,8 @@
 # Release notes
 ## 1.7
-* Added config files to turn on winter death and non-winter sprites.
+* Added config parameter to disable winter crop survival 
+* Added config parameter to enable non-winter dirt during winter (Allow better watering contrast).
+* Added config parameter to enable snow to water crops.
 
 ## 1.6
 * Updated to Stardew Valley 1.3 (including multiplayer).

@@ -20,10 +20,11 @@ and your crops will be saved each night.
 * This mod does _not_ change store inventories, so you can
 only buy crop seeds during their usual seasons.
 
-Setting | Rffect
+Setting | Effect
 :------ | :-----
-'WinterAliveEnabled' | Enable/Disable the death of crops in the winter. (Default True)
-'WinterHoeSnow' | Enable/Disable non-winter hoe dirt overlay in winter. (Default False)
+'WinterAliveEnabled' | Enable/Disable the death of crops in the winter. (Default: True)
+'WinterHoeSnow' | Enable/Disable non-winter hoed dirt overlay in winter. (Allows better watering contrast) (Default: False)
+'WaterCropSnow' | Enable snow to water crops in winter (Default: True)
 
 
 

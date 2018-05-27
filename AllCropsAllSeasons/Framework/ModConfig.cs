@@ -10,6 +10,6 @@ namespace AllCropsAllSeasons.Framework
     {
         public bool WinterAliveEnabled { get; set; } = true;
         public bool WinterHoeSnow { get; set; } = false;
-        //public bool WaterCropSnow { get; set; } = true;  For future
+        public bool WaterCropSnow { get; set; } = true;
     }
 }
