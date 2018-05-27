@@ -1,6 +1,6 @@
 # Release notes
 ## 1.7
-* Added config parameter to disable winter crop survival 
+* Added config parameter to disable individual season crop survival (Does not affect the crop's native season). 
 * Added config parameter to enable non-winter dirt during winter (Allow better watering contrast).
 * Added config parameter to enable snow to water crops.
 

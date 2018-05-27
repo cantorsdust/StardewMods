@@ -8,8 +8,11 @@ namespace AllCropsAllSeasons.Framework
 {
     class ModConfig
     {
-        public bool WinterAliveEnabled { get; set; } = true;
         public bool WinterHoeSnow { get; set; } = false;
         public bool WaterCropSnow { get; set; } = true;
+        public bool CropGrowSpring { get; set; } = true;
+        public bool CropGrowSummer { get; set; } = true;
+        public bool CropGrowFall { get; set; } = true;
+        public bool CropGrowWinter { get; set; } = true;
     }
 }

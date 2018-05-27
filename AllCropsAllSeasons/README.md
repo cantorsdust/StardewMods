@@ -22,11 +22,12 @@ only buy crop seeds during their usual seasons.
 
 Setting | Effect
 :------ | :-----
-'WinterAliveEnabled' | Enable/Disable the death of crops in the winter. (Default: True)
 'WinterHoeSnow' | Enable/Disable non-winter hoed dirt overlay in winter. (Allows better watering contrast) (Default: False)
 'WaterCropSnow' | Enable snow to water crops in winter (Default: True)
-
-
+'CropGrowSpring' | Enable non-native crops to grow in Spring (Default: True)
+'CropGrowSummer' | Enable non-native crops to grow in Summer (Default: True)
+'CropGrowFall' | Enable non-native crops to grow in Fall (Default: True)
+'CropGrowWinter' | Enable non-native crops to grow in Winter (When false, no non-native crops will survive) (Default: True) 
 
 ## Compatibility
 * Works with Stardew Valley 1.3 beta on Linux/Mac/Windows.

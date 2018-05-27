@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using AllCropsAllSeasons.Framework;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -58,6 +59,7 @@ namespace AllCropsAllSeasons
         public void Edit<T>(IAssetData asset)
         {
             // change crop seasons; based on user config
+            StringBuilder cropseason = new StringBuilder();
             if (asset.AssetNameEquals("Data/Crops"))
             {
                 asset
@@ -65,9 +67,17 @@ namespace AllCropsAllSeasons
                     .Set((id, data) =>
                     {
                         string[] fields = data.Split('/');
-                        if (!this.Config.WinterAliveEnabled)
-                            fields[1] = "spring summer fall";
-                        else fields[1] = "spring summer fall winter";
+                        cropseason.Clear();
+                        if (fields[1].Contains("spring") || this.Config.CropGrowSpring)
+                            cropseason.Append("spring");
+                        if (fields[1].Contains("summer") || this.Config.CropGrowSummer)
+                            cropseason.Append(" summer");
+                        if (fields[1].Contains("fall") || this.Config.CropGrowFall)
+                            cropseason.Append(" fall");
+                        if (fields[1].Contains("winter") || this.Config.CropGrowWinter)
+                            cropseason.Append(" winter");
+                        fields[1] = cropseason.ToString();
+                        fields[1] = fields[1].Trim();
                         return string.Join("/", fields);
                     });
             }
@@ -141,7 +151,7 @@ namespace AllCropsAllSeasons
         {
             //If winter is disabled by user, do not restore crops thus game acting natively
             //If not winter, mod acts normal
-            if (this.Config.WinterAliveEnabled || Game1.currentSeason != "winter")
+            if (this.Config.CropGrowWinter || Game1.currentSeason != "winter")
                 // before save (but after tomorrow's day updates), fix any crops that died due to the day update
                 this.RestoreCrops();
         }
