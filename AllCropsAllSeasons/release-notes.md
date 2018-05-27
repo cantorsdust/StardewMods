@@ -3,6 +3,8 @@
 * Added config parameter to disable individual season crop survival (Does not affect the crop's native season). 
 * Added config parameter to enable non-winter dirt during winter (Allow better watering contrast).
 * Added config parameter to enable snow to water crops.
+* Added config parameter to walk through a crops' trellis.
+* Added config parameter to disable crop regrowth.
 
 ## 1.6
 * Updated to Stardew Valley 1.3 (including multiplayer).

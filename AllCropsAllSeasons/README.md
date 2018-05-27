@@ -28,6 +28,8 @@ Setting | Effect
 'CropGrowSummer' | Enable non-native crops to grow in Summer (Default: True)
 'CropGrowFall' | Enable non-native crops to grow in Fall (Default: True)
 'CropGrowWinter' | Enable non-native crops to grow in Winter (When false, no non-native crops will survive) (Default: True) 
+'NoTrellis' | Enable walking through trellis crops (Default: False)
+'NoRegrow' | Disable regrow of crops (Default: False)
 
 ## Compatibility
 * Works with Stardew Valley 1.3 beta on Linux/Mac/Windows.

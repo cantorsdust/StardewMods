@@ -68,16 +68,20 @@ namespace AllCropsAllSeasons
                     {
                         string[] fields = data.Split('/');
                         cropseason.Clear();
-                        if (fields[1].Contains("spring") || this.Config.CropGrowSpring)
+                        if (fields[1].Contains("spring") || this.Config.CropGrowSpring)  //Allow spring growth
                             cropseason.Append("spring");
-                        if (fields[1].Contains("summer") || this.Config.CropGrowSummer)
+                        if (fields[1].Contains("summer") || this.Config.CropGrowSummer) //Allow summer growth
                             cropseason.Append(" summer");
-                        if (fields[1].Contains("fall") || this.Config.CropGrowFall)
+                        if (fields[1].Contains("fall") || this.Config.CropGrowFall)  //Allow fall growth
                             cropseason.Append(" fall");
-                        if (fields[1].Contains("winter") || this.Config.CropGrowWinter)
+                        if (fields[1].Contains("winter") || this.Config.CropGrowWinter) //Allow winter growth
                             cropseason.Append(" winter");
-                        fields[1] = cropseason.ToString();
+                        fields[1] = cropseason.ToString();  //Above lines allowing default seasons to still apply
                         fields[1] = fields[1].Trim();
+                        if (this.Config.NoRegrow)  //Disable crop regrowth
+                            fields[4] = "-1";
+                        if (this.Config.NoTrellis)  //Disable the "trellis"
+                            fields[7] = "false";
                         return string.Join("/", fields);
                     });
             }
@@ -129,7 +133,7 @@ namespace AllCropsAllSeasons
         private void TimeEvents_AfterDayStarted(object sender, EventArgs e)
         {
             this.Locations = GetAllLocations().ToArray();
-            if (this.Config.WaterCropSnow && Game1.isSnowing)
+            if (this.Config.WaterCropSnow && Game1.isSnowing) //If enabled, water crops when snowing
                 this.WaterAllFields(Locations);
         }
 

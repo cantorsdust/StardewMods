@@ -14,5 +14,7 @@ namespace AllCropsAllSeasons.Framework
         public bool CropGrowSummer { get; set; } = true;
         public bool CropGrowFall { get; set; } = true;
         public bool CropGrowWinter { get; set; } = true;
+        public bool NoTrellis { get; set; } = false;
+        public bool NoRegrow { get; set; } = false;
     }
 }
