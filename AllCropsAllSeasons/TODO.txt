@@ -14,3 +14,5 @@ on last day of fall, set all crops.rowInSpriteSheet to 23, which is the row for 
 		--could remember which crops had that done and set them back a day later
 		
 Add seeds to seed shop inventory.  See SeedShop.cs line 155, shopStock().
+
+Add GUI and reload element to enable/disable in game

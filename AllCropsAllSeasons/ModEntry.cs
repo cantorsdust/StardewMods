@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using AllCropsAllSeasons.Framework;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -15,11 +16,20 @@ namespace AllCropsAllSeasons
     /// <summary>The entry class called by SMAPI.</summary>
     internal class ModEntry : Mod, IAssetEditor
     {
+
         /*********
         ** Properties
         *********/
         /// <summary>The crop tiles which should be saved for the next day.</summary>
         private CropTileState[] SavedCrops = new CropTileState[0];
+
+        /// <summary>Configuration payload.</summary>
+        private ModConfig Config;
+
+        /// <summary>All Game locations.</summary>
+        private GameLocation[] Locations;
+        private bool IsLoaded => Context.IsWorldReady && this.Locations != null;
+
 
 
         /*********
@@ -29,6 +39,7 @@ namespace AllCropsAllSeasons
         /// <param name="helper">Provides simplified APIs for writing mods.</param>
         public override void Entry(IModHelper helper)
         {
+            this.Config = helper.ReadConfig<ModConfig>();
             PlayerEvents.Warped += this.PlayerEvents_Warped;
             SaveEvents.BeforeSave += this.SaveEvents_BeforeSave;
         }
@@ -46,7 +57,8 @@ namespace AllCropsAllSeasons
         /// <param name="asset">A helper which encapsulates metadata about an asset and enables changes to it.</param>
         public void Edit<T>(IAssetData asset)
         {
-            // change crop seasons
+            // change crop seasons; based on user config
+            StringBuilder cropseason = new StringBuilder();
             if (asset.AssetNameEquals("Data/Crops"))
             {
                 asset
@@ -54,16 +66,58 @@ namespace AllCropsAllSeasons
                     .Set((id, data) =>
                     {
                         string[] fields = data.Split('/');
-                        fields[1] = "spring summer fall winter";
+                        cropseason.Clear();
+                        if (fields[1].Contains("spring") || this.Config.CropGrowSpring)  //Allow spring growth
+                            cropseason.Append("spring");
+                        if (fields[1].Contains("summer") || this.Config.CropGrowSummer) //Allow summer growth
+                            cropseason.Append(" summer");
+                        if (fields[1].Contains("fall") || this.Config.CropGrowFall)  //Allow fall growth
+                            cropseason.Append(" fall");
+                        if (fields[1].Contains("winter") || this.Config.CropGrowWinter) //Allow winter growth
+                            cropseason.Append(" winter");
+                        fields[1] = cropseason.ToString();  //Above lines allowing default seasons to still apply
+                        fields[1] = fields[1].Trim();
+                        if (this.Config.NoRegrow)  //Disable crop regrowth
+                            fields[4] = "-1";
+                        if (this.Config.NoTrellis)  //Disable the "trellis"
+                            fields[7] = "false";
                         return string.Join("/", fields);
                     });
             }
 
             // change dirt texture
-            else if (asset.AssetNameEquals("TerrainFeatures/hoeDirtSnow"))
+            else if (asset.AssetNameEquals("TerrainFeatures/hoeDirtSnow") && this.Config.WinterHoeSnow) //Allows users to set plowed snow or dirt in winter
                 asset.ReplaceWith(this.Helper.Content.Load<Texture2D>("TerrainFeatures/hoeDirt", ContentSource.GameContent));
         }
 
+
+        /// <summary>Water All Fields.</summary> //Thanks CJB!
+        public void WaterAllFields(GameLocation[] locations)
+        {
+            foreach (GameLocation location in locations)
+            {
+                if (!location.IsFarm && !location.Name.Contains("Greenhouse"))
+                    continue;
+
+                foreach (TerrainFeature terrainFeature in location.terrainFeatures.Values)
+                {
+                    if (terrainFeature is HoeDirt dirt)
+                        dirt.state.Value = HoeDirt.watered;
+                }
+
+
+            }
+        }
+
+        /// <summary>Get all game locations.</summary> //Thanks CJB!
+        public static IEnumerable<GameLocation> GetAllLocations()
+        {
+            foreach (GameLocation location in Game1.locations)
+            {
+                // current location
+                yield return location;
+            }
+        }
 
         /*********
         ** Private methods
@@ -71,6 +125,7 @@ namespace AllCropsAllSeasons
         /****
         ** Event handlers
         ****/
+
         /// <summary>The method called when the player warps to a new location.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
@@ -80,6 +135,10 @@ namespace AllCropsAllSeasons
             // about to end the day
             if (e.NewLocation is FarmHouse)
                 this.StashCrops();
+
+            this.Locations = GetAllLocations().ToArray();
+            if (this.Config.WaterCropSnow && Game1.isSnowing) //If enabled, water crops when snowing
+                this.WaterAllFields(Locations);
         }
 
         /// <summary>The method called when the game is writing to the save file.</summary>
@@ -87,8 +146,11 @@ namespace AllCropsAllSeasons
         /// <param name="e">The event arguments.</param>
         private void SaveEvents_BeforeSave(object sender, EventArgs e)
         {
-            // before save (but after tomorrow's day updates), fix any crops that died due to the day update
-            this.RestoreCrops();
+            //If winter is disabled by user, do not restore crops thus game acting natively
+            //If not winter, mod acts normal
+            if (this.Config.CropGrowWinter || Game1.currentSeason != "winter")
+                // before save (but after tomorrow's day updates), fix any crops that died due to the day update
+                this.RestoreCrops();
         }
 
         /****
@@ -160,7 +222,7 @@ namespace AllCropsAllSeasons
             foreach (GiantCrop giantCrop in farm.resourceClumps.OfType<GiantCrop>())
             {
                 Vector2 tile = giantCrop.tile.Value;
-                
+
                 yield return tile; // top left tile
                 yield return tile + new Vector2(1, 0);
                 yield return tile + new Vector2(0, 1);
