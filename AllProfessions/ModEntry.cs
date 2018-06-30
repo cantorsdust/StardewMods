@@ -1,15 +1,15 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using AllProfessions.Framework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
+using SFarmer = StardewValley.Farmer;
 
 namespace AllProfessions
 {
     /// <summary>The entry class called by SMAPI.</summary>
-    internal class ModEntry : Mod
+    public class ModEntry : Mod
     {
         /*********
         ** Properties
@@ -17,16 +17,16 @@ namespace AllProfessions
         /// <summary>Professions to gain for each level. Each entry represents the skill, level requirement, and profession IDs.</summary>
         private readonly Tuple<Skill, int, int[]>[] ProfessionsToGain =
         {
-            Tuple.Create(Skill.Farming, 5, new[] { Farmer.rancher, Farmer.tiller }),
-            Tuple.Create(Skill.Farming, 10, new[] { Farmer.butcher/*actually coopmaster*/, Farmer.shepherd, Farmer.artisan, Farmer.agriculturist }),
-            Tuple.Create(Skill.Fishing, 5, new[] { Farmer.fisher, Farmer.trapper }),
-            Tuple.Create(Skill.Fishing, 10, new[] { Farmer.angler, Farmer.pirate, Farmer.baitmaster, Farmer.mariner }),
-            Tuple.Create(Skill.Foraging, 5, new[] { Farmer.forester, Farmer.gatherer }),
-            Tuple.Create(Skill.Foraging, 10, new[] { Farmer.lumberjack, Farmer.tapper, Farmer.botanist, Farmer.tracker }),
-            Tuple.Create(Skill.Mining, 5, new[] { Farmer.miner, Farmer.geologist }),
-            Tuple.Create(Skill.Mining, 10, new[] { Farmer.blacksmith, Farmer.burrower/*actually prospector*/, Farmer.excavator, Farmer.gemologist }),
-            Tuple.Create(Skill.Combat, 5, new[] { Farmer.fighter, Farmer.scout }),
-            Tuple.Create(Skill.Combat, 10, new[] { Farmer.brute, Farmer.defender, Farmer.acrobat, Farmer.desperado })
+            Tuple.Create(Skill.Farming, 5, new[] { SFarmer.rancher, SFarmer.tiller }),
+            Tuple.Create(Skill.Farming, 10, new[] { SFarmer.butcher/*actually coopmaster*/, SFarmer.shepherd, SFarmer.artisan, SFarmer.agriculturist }),
+            Tuple.Create(Skill.Fishing, 5, new[] { SFarmer.fisher, SFarmer.trapper }),
+            Tuple.Create(Skill.Fishing, 10, new[] { SFarmer.angler, SFarmer.pirate, SFarmer.baitmaster, SFarmer.mariner }),
+            Tuple.Create(Skill.Foraging, 5, new[] { SFarmer.forester, SFarmer.gatherer }),
+            Tuple.Create(Skill.Foraging, 10, new[] { SFarmer.lumberjack, SFarmer.tapper, SFarmer.botanist, SFarmer.tracker }),
+            Tuple.Create(Skill.Mining, 5, new[] { SFarmer.miner, SFarmer.geologist }),
+            Tuple.Create(Skill.Mining, 10, new[] { SFarmer.blacksmith, SFarmer.burrower/*actually prospector*/, SFarmer.excavator, SFarmer.gemologist }),
+            Tuple.Create(Skill.Combat, 5, new[] { SFarmer.fighter, SFarmer.scout }),
+            Tuple.Create(Skill.Combat, 10, new[] { SFarmer.brute, SFarmer.defender, SFarmer.acrobat, SFarmer.desperado })
         };
 
 

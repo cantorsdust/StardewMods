@@ -1,10 +1,10 @@
-﻿{
+ {
   "Name": "All Professions",
   "Author": "cantorsdust",
-  "Version": "1.3.1",
+  "Version": "1.4.0",
   "Description": "Gives you all possible professions when you level up, instead of just the one chosen.",
   "UniqueID": "cantorsdust.AllProfessions",
   "EntryDll": "AllProfessions.dll",
-  "MinimumApiVersion": "2.4",
+  "MinimumApiVersion": "2.6-beta",
   "UpdateKeys": [ "Nexus:174" ]
-}
+} 
