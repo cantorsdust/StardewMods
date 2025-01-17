@@ -2,14 +2,14 @@
     /*********
     ** In-game messages (游戏内消息)
     *********/
-    "message.enabled": "你现在可以重新捕捉传说鱼了. 按 {{key}} 可禁用功能.",
-    "message.disabled": "你现在无法再次捕捉传说鱼了. 按 {{key}} 可启用功能.",
+    "message.enabled": "你现在可以再次捕捉传说鱼类了。按 {{key}} 禁用该功能。",
+    "message.disabled": "你现在无法再次捕捉传说鱼类了。按 {{key}} 启用该功能。",
 
 
     /*********
     ** Generic Mod Config Menu UI (通用模组管理界面)
     *********/
-    "config.controls": "控制",
-    "config.toggle-key.name": "快捷键",
-    "config.toggle-key.desc": "一个快捷按键绑定.切换是否可以重新捕捉传说鱼功能."
+    "config.controls": "按键绑定",
+    "config.toggle-key.name": "功能开关",
+    "config.toggle-key.desc": "使用该快捷键，来切换是否可以再次捕捉传说鱼类的功能。"
 }
