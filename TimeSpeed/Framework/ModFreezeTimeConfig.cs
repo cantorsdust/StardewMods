@@ -15,6 +15,9 @@ internal class ModFreezeTimeConfig
     /// <summary>The time at which to freeze time everywhere (or <c>null</c> to disable this). This should be 24-hour military time (e.g. 800 for 8am, 1600 for 8pm, etc).</summary>
     public int? AnywhereAtTime { get; set; }
 
+    /// <summary>Whether to freeze time before players pass out (1:50am).</summary>
+    public bool PassOut { get; set; } = false;
+
     /// <summary>Whether to freeze time indoors.</summary>
     public bool Indoors { get; set; } = false;
 

@@ -37,9 +37,13 @@ internal class ModConfig
 
     /// <summary>Get whether the time should be frozen at a given time of day.</summary>
     /// <param name="time">The time of day in 24-hour military format (e.g. 1600 for 8pm).</param>
-    public bool ShouldFreeze(int time)
+    /// <param name="passOutCheck">Get whether the time should be frozen before players pass out (1:50am).</param>
+    public bool ShouldFreeze(int time, bool passOutCheck = false)
     {
-        return time >= this.FreezeTime.AnywhereAtTime;
+        if(passOutCheck)
+            return time >= 2550 && this.FreezeTime.PassOut;
+        else
+            return time >= this.FreezeTime.AnywhereAtTime;
     }
 
     /// <summary>Get whether time settings should be applied on a given day.</summary>

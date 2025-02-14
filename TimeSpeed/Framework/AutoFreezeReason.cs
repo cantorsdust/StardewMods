@@ -12,5 +12,8 @@ internal enum AutoFreezeReason
     FrozenForLocation,
 
     /// <summary>Time was automatically frozen per <see cref="ModConfig.ShouldFreeze(int)"/>.</summary>
-    FrozenAtTime
+    FrozenAtTime,
+
+    /// <summary>Time was automatically frozen per <see cref="ModConfig.ShouldFreezeBeforePassOut(int)"/>.</summary>
+    FrozenBeforePassOut
 }

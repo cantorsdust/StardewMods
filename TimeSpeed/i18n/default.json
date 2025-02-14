@@ -13,6 +13,7 @@
 
     // changed based on location
     "message.on-location-change.time-stopped-globally": "Looks like time stopped everywhere...",
+    "message.on-location-change.time-stopped-globally-pass-out": "Time stopped, am I dreaming?",
     "message.on-location-change.time-stopped-here": "It feels like time is frozen here...",
     "message.on-location-change.time-speed-here": "10 minutes feels more like {{seconds}} seconds here...",
 
@@ -44,6 +45,8 @@
     "config.freeze-time": "Freeze time",
     "config.anywhere-at-time.name": "Freeze time at",
     "config.anywhere-at-time.desc": "The time at which to freeze time everywhere. This should be 24-hour military time, from 600 (6am) to 2400 (midnight) and 2600 (2am). You can set it to 2600 to disable it.",
+    "config.freeze-before-passing-out.name": "Freeze time before 2am",
+    "config.freeze-before-passing-out.desc": "Whether to freeze time everywhere at 1:50am, before players pass out. This functions in addition to the freeze time set above.",
     "config.freeze-time-indoors.name": "Indoors",
     "config.freeze-time-indoors.desc": "Whether to freeze time while indoors.",
     "config.freeze-time-outdoors.name": "Outdoors",
