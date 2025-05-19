@@ -1,6 +1,9 @@
 ﻿﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Improved translations. Thanks to SummerFleur2997 (updated Chinese)!
+
 ## 1.8.9
 Released 12 January 2025 for SMAPI 4.1.10 or later. Updated by Pathoschild.
 

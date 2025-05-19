@@ -1,6 +1,9 @@
 ﻿﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Improved translations. Thanks to SummerFleur2997 (added Chinese)!
+
 ## 1.6.7
 Released 04 November 2024 for SMAPI 4.1.2 or later. Updated by Pathoschild.
 
