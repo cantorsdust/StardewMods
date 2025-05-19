@@ -1,7 +1,7 @@
 ﻿{
     "Name": "Instant Grow Trees",
     "Author": "cantorsdust and Pathoschild",
-    "Version": "1.6.7",
+    "Version": "%ProjectVersion%",
     "Description": "Makes trees grow instantly overnight if they have enough space.",
     "UniqueID": "cantorsdust.InstantGrowTrees",
     "EntryDll": "InstantGrowTrees.dll",
