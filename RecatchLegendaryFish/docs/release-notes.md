@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* You can now set an optional limit per legendary fish [in the options](README.md#Configure) (once per day, week, season, or year).
 * Improved translations. Thanks to SummerFleur2997 (updated Chinese)!
 
 ## 1.8.9

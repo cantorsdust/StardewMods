@@ -9,6 +9,18 @@
     /*********
     ** Generic Mod Config Menu UI (通用模组管理界面)
     *********/
+    // options section
+    // TODO
+    "config.options": "Options",
+    "config.catch-limit.name": "Catch limit per fish",
+    "config.catch-limit.desc": "How often you can catch each legendary fish.",
+    "config.catch-limit.Unlimited": "Unlimited",
+    "config.catch-limit.OnePerDay": "One of each per day",
+    "config.catch-limit.OnePerWeek": "One of each per week",
+    "config.catch-limit.OnePerSeason": "One of each per season",
+    "config.catch-limit.OnePerYear": "One of each per year",
+
+    // controls section
     "config.controls": "按键绑定",
     "config.toggle-key.name": "功能开关",
     "config.toggle-key.desc": "使用该快捷键，来切换是否可以再次捕捉传说鱼类的功能。"

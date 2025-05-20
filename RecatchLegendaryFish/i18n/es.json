@@ -9,6 +9,18 @@
     /*********
     ** Generic Mod Config Menu UI
     *********/
+    // options section
+    // TODO
+    "config.options": "Options",
+    "config.catch-limit.name": "Catch limit per fish",
+    "config.catch-limit.desc": "How often you can catch each legendary fish.",
+    "config.catch-limit.Unlimited": "Unlimited",
+    "config.catch-limit.OnePerDay": "One of each per day",
+    "config.catch-limit.OnePerWeek": "One of each per week",
+    "config.catch-limit.OnePerSeason": "One of each per season",
+    "config.catch-limit.OnePerYear": "One of each per year",
+
+    // controls section
     "config.controls": "Controles",
     "config.toggle-key.name": "Tecla de activación",
     "config.toggle-key.desc": "Una combinación de teclas que activa la posibilidad de recuperar peces legendarios."

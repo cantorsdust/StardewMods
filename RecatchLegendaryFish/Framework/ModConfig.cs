@@ -11,6 +11,9 @@ internal class ModConfig
     /*********
     ** Accessors
     *********/
+    /// <summary>How often each legendary fish can be caught.</summary>
+    public CatchLimitType CatchLimit { get; set; } = CatchLimitType.Unlimited;
+
     /// <summary>A keybind which toggles whether the player can recatch fish.</summary>
     public KeybindList ToggleKey { get; set; } = new();
 

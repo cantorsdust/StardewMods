@@ -1,6 +1,7 @@
 using System;
 using cantorsdust.Common.Integrations;
 using StardewModdingAPI;
+using StardewValley;
 
 namespace RecatchLegendaryFish.Framework;
 
@@ -28,6 +29,19 @@ internal static class GenericModConfigMenuIntegration
         api.Register(manifest, reset, save);
 
         // add options
+        api.AddSectionTitle(manifest, I18n.Config_Options);
+        api.AddTextOption(
+            manifest,
+            name: I18n.Config_CatchLimit_Name,
+            tooltip: I18n.Config_CatchLimit_Desc,
+            getValue: () => getConfig().CatchLimit.ToString(),
+            setValue: value => getConfig().CatchLimit = Utility.TryParseEnum(value, out CatchLimitType limit)
+                ? limit
+                : CatchLimitType.Unlimited,
+            allowedValues: Enum.GetNames<CatchLimitType>(),
+            formatAllowedValue: value => I18n.GetByKey($"config.catch-limit.{value}").Default(value.ToString())
+        );
+
         api.AddSectionTitle(manifest, I18n.Config_Controls);
         api.AddKeybindList(
             manifest,
