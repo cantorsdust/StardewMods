@@ -17,7 +17,7 @@ internal class TimeHelper
     private double CurrentProgressRemainder;
 
     /// <summary>The handlers to notify when the tick progress changes.</summary>
-    private event EventHandler<TickProgressChangedEventArgs> Handlers;
+    private event EventHandler<TickProgressChangedEventArgs>? Handlers;
 
 
     /*********

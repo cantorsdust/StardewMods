@@ -1,4 +1,6 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
+using cantorsdust.Common;
 using StardewValley;
 
 namespace TimeSpeed.Framework;
@@ -30,7 +32,7 @@ internal class ModConfig
     *********/
     /// <summary>Get whether time should be frozen at a given location.</summary>
     /// <param name="location">The game location.</param>
-    public bool ShouldFreeze(GameLocation location)
+    public bool ShouldFreeze(GameLocation? location)
     {
         return this.FreezeTime.ShouldFreeze(location);
     }
@@ -52,7 +54,7 @@ internal class ModConfig
 
     /// <summary>Get the number of milliseconds per minute to apply for a location.</summary>
     /// <param name="location">The game location.</param>
-    public int GetMillisecondsPerMinute(GameLocation location)
+    public int GetMillisecondsPerMinute(GameLocation? location)
     {
         return (int)(this.SecondsPerMinute.GetSecondsPerMinute(location) * 1000);
     }
@@ -64,10 +66,13 @@ internal class ModConfig
     /// <summary>The method called after the config file is deserialized.</summary>
     /// <param name="context">The deserialization context.</param>
     [OnDeserialized]
+    [SuppressMessage("ReSharper", "NullCoalescingConditionIsAlwaysNotNullAccordingToAPIContract", Justification = SuppressReasons.ValidatesNullability)]
+    [SuppressMessage("ReSharper", "UnusedMember.Local", Justification = SuppressReasons.UsedViaReflection)]
+    [SuppressMessage("ReSharper", "UnusedParameter.Local", Justification = SuppressReasons.UsedViaReflection)]
     private void OnDeserializedMethod(StreamingContext context)
     {
-        this.SecondsPerMinute ??= new();
-        this.FreezeTime ??= new();
-        this.Keys ??= new();
+        this.SecondsPerMinute ??= new ModSecondsPerMinuteConfig();
+        this.FreezeTime ??= new ModFreezeTimeConfig();
+        this.Keys ??= new ModControlsConfig();
     }
 }

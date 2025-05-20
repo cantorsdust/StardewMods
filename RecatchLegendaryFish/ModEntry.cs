@@ -14,7 +14,7 @@ internal class ModEntry : Mod
     ** Properties
     *********/
     /// <summary>The mod configuration.</summary>
-    private ModConfig Config;
+    private ModConfig Config = null!; // set in Entry
 
     /// <summary>Whether the mod is currently enabled.</summary>
     private bool IsEnabled = true;
@@ -44,9 +44,7 @@ internal class ModEntry : Mod
     ** Event handlers
     ****/
     /// <inheritdoc cref="IContentEvents.AssetRequested"/>
-    /// <param name="sender">The event sender.</param>
-    /// <param name="e">The event arguments.</param>
-    private void OnAssetRequested(object sender, AssetRequestedEventArgs e)
+    private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
     {
         if (this.IsEnabled && e.Name.IsEquivalentTo("Data/Locations"))
         {
@@ -58,8 +56,11 @@ internal class ModEntry : Mod
                         if (location.Fish is null)
                             continue;
 
-                        foreach (SpawnFishData fish in location.Fish)
+                        foreach (SpawnFishData? fish in location.Fish)
                         {
+                            if (fish is null)
+                                continue;
+
                             // Known limitation: there's no good way to handle ItemId being an item query instead
                             // of an item ID, but all vanilla legendary fish (and likely most modded ones) use an
                             // item ID.
@@ -76,15 +77,20 @@ internal class ModEntry : Mod
     }
 
     /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
-    /// <param name="sender">The event sender.</param>
-    /// <param name="e">The event arguments.</param>
-    private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
+    private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
         GenericModConfigMenuIntegration.Register(this.ModManifest, this.Helper.ModRegistry, this.Monitor,
             getConfig: () => this.Config,
             reset: () => this.Config = new(),
             save: this.OnConfigChanged
         );
+    }
+
+    /// <inheritdoc cref="IInputEvents.ButtonsChanged"/>
+    private void OnButtonsChanged(object? sender, ButtonsChangedEventArgs e)
+    {
+        if (Context.IsPlayerFree && this.Config.ToggleKey.JustPressed())
+            this.OnToggle();
     }
 
     /// <summary>Update when the mod settings are changed through Generic Mod Config Menu.</summary>
@@ -95,22 +101,13 @@ internal class ModEntry : Mod
         this.Helper.GameContent.InvalidateCache("Data/Locations");
     }
 
-    /// <inheritdoc cref="IInputEvents.ButtonsChanged"/>
-    /// <param name="sender">The event sender.</param>
-    /// <param name="e">The event arguments.</param>
-    private void OnButtonsChanged(object sender, ButtonsChangedEventArgs e)
-    {
-        if (Context.IsPlayerFree && this.Config.ToggleKey.JustPressed())
-            this.OnToggle();
-    }
-
     /// <summary>Handle the toggle key.</summary>
     private void OnToggle()
     {
         this.IsEnabled = !this.IsEnabled;
         this.Helper.GameContent.InvalidateCache("Data/Locations");
 
-        string key = this.Config.ToggleKey.GetKeybindCurrentlyDown()?.ToString();
+        string? key = this.Config.ToggleKey.GetKeybindCurrentlyDown()?.ToString();
         string message = this.IsEnabled
             ? I18n.Message_Enabled(key: key)
             : I18n.Message_Disabled(key: key);

@@ -1,6 +1,5 @@
 using cantorsdust.Common;
 using InstantGrowTrees.Framework;
-using Microsoft.Xna.Framework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
@@ -15,7 +14,7 @@ internal class ModEntry : Mod
     ** Properties
     *********/
     /// <summary>The mod configuration.</summary>
-    private ModConfig Config;
+    private ModConfig Config = null!; // set in Entry
 
     /// <summary>The number of days after a tree is fully grown until it reaches iridium quality.</summary>
     /// <remarks>Fruit trees increase in quality once per year, so iridium is 30 days * 4 seasons * 3 quality increases.</remarks>
@@ -44,9 +43,7 @@ internal class ModEntry : Mod
     ** Event handlers
     ****/
     /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
-    /// <param name="sender">The event sender.</param>
-    /// <param name="e">The event arguments.</param>
-    private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
+    private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
         GenericModConfigMenuIntegration.Register(this.ModManifest, this.Helper.ModRegistry, this.Monitor,
             getConfig: () => this.Config,
@@ -56,9 +53,7 @@ internal class ModEntry : Mod
     }
 
     /// <inheritdoc cref="IGameLoopEvents.DayStarted"/>
-    /// <param name="sender">The event sender.</param>
-    /// <param name="e">The event arguments.</param>
-    private void OnDayStarted(object sender, DayStartedEventArgs e)
+    private void OnDayStarted(object? sender, DayStartedEventArgs e)
     {
         // When the player loads a saved game, or after the overnight save,
         // check for any trees that should be grown.
@@ -81,13 +76,13 @@ internal class ModEntry : Mod
         // apply
         Utility.ForEachLocation(location =>
         {
-            foreach ((Vector2 tile, TerrainFeature feature) in location.terrainFeatures.Pairs)
+            foreach (TerrainFeature feature in location.terrainFeatures.Values)
             {
                 switch (feature)
                 {
                     case FruitTree fruitTree:
                         if (growFruitTrees)
-                            this.GrowFruitTree(fruitTree, location, tile);
+                            this.GrowFruitTree(fruitTree);
                         if (ageFruitTrees)
                             this.AgeFruitTree(fruitTree);
                         break;
@@ -124,9 +119,7 @@ internal class ModEntry : Mod
 
     /// <summary>Grow a fruit tree if it's eligible for growth.</summary>
     /// <param name="tree">The tree to grow.</param>
-    /// <param name="location">The tree's location.</param>
-    /// <param name="tile">The tree's tile position.</param>
-    private void GrowFruitTree(FruitTree tree, GameLocation location, Vector2 tile)
+    private void GrowFruitTree(FruitTree tree)
     {
         FruitTreeConfig config = this.Config.FruitTrees;
 

@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
+using cantorsdust.Common;
 using StardewValley;
 using StardewValley.Locations;
 
@@ -44,7 +46,7 @@ internal class ModFreezeTimeConfig
     *********/
     /// <summary>Get whether time should be frozen in the given location.</summary>
     /// <param name="location">The location to check.</param>
-    public bool ShouldFreeze(GameLocation location)
+    public bool ShouldFreeze(GameLocation? location)
     {
         if (location == null || this.ExceptLocationNames.Contains(location.Name))
             return false;
@@ -82,9 +84,15 @@ internal class ModFreezeTimeConfig
     /// <summary>The method called after the config file is deserialized.</summary>
     /// <param name="context">The deserialization context.</param>
     [OnDeserialized]
+    [SuppressMessage("ReSharper", "NullCoalescingConditionIsAlwaysNotNullAccordingToAPIContract", Justification = SuppressReasons.ValidatesNullability)]
+    [SuppressMessage("ReSharper", "UnusedMember.Local", Justification = SuppressReasons.UsedViaReflection)]
+    [SuppressMessage("ReSharper", "UnusedParameter.Local", Justification = SuppressReasons.UsedViaReflection)]
     private void OnDeserializedMethod(StreamingContext context)
     {
-        this.ByLocationName = new(this.ByLocationName ?? new(), StringComparer.OrdinalIgnoreCase);
-        this.ExceptLocationNames = new(this.ExceptLocationNames ?? new(), StringComparer.OrdinalIgnoreCase);
+        this.ByLocationName = new HashSet<string>(this.ByLocationName ?? [], StringComparer.OrdinalIgnoreCase);
+        this.ByLocationName.Remove(null!);
+
+        this.ExceptLocationNames = new HashSet<string>(this.ExceptLocationNames ?? [], StringComparer.OrdinalIgnoreCase);
+        this.ExceptLocationNames.Remove(null!);
     }
 }

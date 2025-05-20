@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.Serialization;
+using cantorsdust.Common;
 using StardewModdingAPI;
 
 namespace AllProfessions.Framework;
@@ -62,8 +64,12 @@ internal class ModConfig
     /// <summary>The method called after the config file is deserialized.</summary>
     /// <param name="context">The deserialization context.</param>
     [OnDeserialized]
+    [SuppressMessage("ReSharper", "NullCoalescingConditionIsAlwaysNotNullAccordingToAPIContract", Justification = SuppressReasons.ValidatesNullability)]
+    [SuppressMessage("ReSharper", "UnusedMember.Local", Justification = SuppressReasons.UsedViaReflection)]
+    [SuppressMessage("ReSharper", "UnusedParameter.Local", Justification = SuppressReasons.UsedViaReflection)]
     private void OnDeserializedMethod(StreamingContext context)
     {
         this.IgnoreProfessions = new(this.IgnoreProfessions ?? new(), StringComparer.OrdinalIgnoreCase);
+        this.IgnoreProfessions.Remove(null!);
     }
 }

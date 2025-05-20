@@ -21,10 +21,10 @@ internal class ModEntry : Mod
     private readonly string DataFileHash = "a3b6882bf1d9026055423b73cbe05e50";
 
     /// <summary>The professions by skill and level requirement.</summary>
-    private ModDataProfessions[] ProfessionMap;
+    private ModDataProfessions[] ProfessionMap = null!; // set in Entry
 
     /// <summary>The mod configuration.</summary>
-    private ModConfig Config;
+    private ModConfig Config = null!; // set in Entry
 
 
     /*********
@@ -42,7 +42,7 @@ internal class ModEntry : Mod
             helper.WriteConfig(this.Config);
 
         // read data
-        this.ProfessionMap = this.GetProfessionMap(this.Helper.Data.ReadJsonFile<ModData>("assets/data.json")).ToArray();
+        this.ProfessionMap = this.GetProfessionMap(this.Helper.Data.ReadJsonFile<ModData>("assets/data.json") ?? new ModData()).ToArray();
         if (!this.ProfessionMap.Any())
         {
             this.Monitor.Log("The data.json file is missing or invalid; try reinstalling the mod.", LogLevel.Error);
@@ -71,9 +71,7 @@ internal class ModEntry : Mod
     ** Event handlers
     ****/
     /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
-    /// <param name="sender">The event sender.</param>
-    /// <param name="e">The event arguments.</param>
-    private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
+    private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
         GenericModConfigMenuIntegration.Register(this.ModManifest, this.Helper.ModRegistry, this.Monitor, this.ProfessionMap,
             getConfig: () => this.Config,
@@ -87,9 +85,7 @@ internal class ModEntry : Mod
     }
 
     /// <inheritdoc cref="IGameLoopEvents.DayStarted"/>
-    /// <param name="sender">The event sender.</param>
-    /// <param name="e">The event arguments.</param>
-    private void OnDayStarted(object sender, DayStartedEventArgs e)
+    private void OnDayStarted(object? sender, DayStartedEventArgs e)
     {
         // When the player loads a saved game, or after the overnight level screen,
         // add any professions the player should have but doesn't.
@@ -114,12 +110,9 @@ internal class ModEntry : Mod
     /// <param name="data">The underlying mod data.</param>
     private IEnumerable<ModDataProfessions> GetProfessionMap(ModData data)
     {
-        if (data?.ProfessionsToGain == null)
-            yield break;
-
         foreach (ModDataProfessions set in data.ProfessionsToGain)
         {
-            if (set.Professions != null && set.Professions.Any())
+            if (set.Professions.Any())
                 yield return set;
         }
     }

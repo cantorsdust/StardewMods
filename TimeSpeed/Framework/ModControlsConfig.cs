@@ -1,3 +1,6 @@
+using System.Diagnostics.CodeAnalysis;
+using System.Runtime.Serialization;
+using cantorsdust.Common;
 using StardewModdingAPI;
 using StardewModdingAPI.Utilities;
 
@@ -20,4 +23,22 @@ internal class ModControlsConfig
 
     /// <summary>Reload all values from the config file and apply them immediately. Time will stay frozen if it was frozen via keybind.</summary>
     public KeybindList ReloadConfig { get; set; } = new(SButton.B);
+
+
+    /*********
+    ** Private methods
+    *********/
+    /// <summary>The method called after the config file is deserialized.</summary>
+    /// <param name="context">The deserialization context.</param>
+    [OnDeserialized]
+    [SuppressMessage("ReSharper", "NullCoalescingConditionIsAlwaysNotNullAccordingToAPIContract", Justification = SuppressReasons.ValidatesNullability)]
+    [SuppressMessage("ReSharper", "UnusedMember.Local", Justification = SuppressReasons.UsedViaReflection)]
+    [SuppressMessage("ReSharper", "UnusedParameter.Local", Justification = SuppressReasons.UsedViaReflection)]
+    private void OnDeserializedMethod(StreamingContext context)
+    {
+        this.FreezeTime ??= new KeybindList();
+        this.IncreaseTickInterval ??= new KeybindList();
+        this.DecreaseTickInterval ??= new KeybindList();
+        this.ReloadConfig ??= new KeybindList();
+    }
 }

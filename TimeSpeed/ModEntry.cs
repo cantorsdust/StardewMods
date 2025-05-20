@@ -21,7 +21,7 @@ internal class ModEntry : Mod
     private readonly TimeHelper TimeHelper = new();
 
     /// <summary>The mod configuration.</summary>
-    private ModConfig Config;
+    private ModConfig Config = null!; // set in Entry
 
     /// <summary>Whether the player has manually frozen (<c>true</c>) or resumed (<c>false</c>) time.</summary>
     private bool? ManualFreeze;
@@ -95,9 +95,7 @@ internal class ModEntry : Mod
     ** Event handlers
     ****/
     /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
-    /// <param name="sender">The event sender.</param>
-    /// <param name="e">The event arguments.</param>
-    private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
+    private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
         GenericModConfigMenuIntegration.Register(this.ModManifest, this.Helper.ModRegistry, this.Monitor,
             getConfig: () => this.Config,
@@ -112,18 +110,14 @@ internal class ModEntry : Mod
     }
 
     /// <inheritdoc cref="IGameLoopEvents.SaveLoaded"/>
-    /// <param name="sender">The event sender.</param>
-    /// <param name="e">The event arguments.</param>
-    private void OnSaveLoaded(object sender, SaveLoadedEventArgs e)
+    private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
     {
         if (!Context.IsMainPlayer)
             this.Monitor.Log("Disabled mod; only works for the main player in multiplayer.", LogLevel.Warn);
     }
 
     /// <inheritdoc cref="IGameLoopEvents.DayStarted"/>
-    /// <param name="sender">The event sender.</param>
-    /// <param name="e">The event arguments.</param>
-    private void OnDayStarted(object sender, DayStartedEventArgs e)
+    private void OnDayStarted(object? sender, DayStartedEventArgs e)
     {
         if (!this.ShouldEnable())
             return;
@@ -134,9 +128,7 @@ internal class ModEntry : Mod
     }
 
     /// <inheritdoc cref="IInputEvents.ButtonsChanged"/>
-    /// <param name="sender">The event sender.</param>
-    /// <param name="e">The event arguments.</param>
-    private void OnButtonsChanged(object sender, ButtonsChangedEventArgs e)
+    private void OnButtonsChanged(object? sender, ButtonsChangedEventArgs e)
     {
         if (!this.ShouldEnable(forInput: true))
             return;
@@ -152,9 +144,7 @@ internal class ModEntry : Mod
     }
 
     /// <inheritdoc cref="IPlayerEvents.Warped"/>
-    /// <param name="sender">The event sender.</param>
-    /// <param name="e">The event arguments.</param>
-    private void OnWarped(object sender, WarpedEventArgs e)
+    private void OnWarped(object? sender, WarpedEventArgs e)
     {
         if (!this.ShouldEnable() || !e.IsLocalPlayer)
             return;
@@ -163,9 +153,7 @@ internal class ModEntry : Mod
     }
 
     /// <inheritdoc cref="IGameLoopEvents.TimeChanged"/>
-    /// <param name="sender">The event sender.</param>
-    /// <param name="e">The event arguments.</param>
-    private void OnTimeChanged(object sender, TimeChangedEventArgs e)
+    private void OnTimeChanged(object? sender, TimeChangedEventArgs e)
     {
         if (!this.ShouldEnable())
             return;
@@ -174,9 +162,7 @@ internal class ModEntry : Mod
     }
 
     /// <inheritdoc cref="IGameLoopEvents.UpdateTicked"/>
-    /// <param name="sender">The event sender.</param>
-    /// <param name="e">The event arguments.</param>
-    private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
+    private void OnUpdateTicked(object? sender, UpdateTickedEventArgs e)
     {
         if (!this.ShouldEnable())
             return;
@@ -185,7 +171,7 @@ internal class ModEntry : Mod
 
         if (e.IsOneSecond && this.Monitor.IsVerbose)
         {
-            string timeFrozenLabel;
+            string? timeFrozenLabel;
             if (this.ManualFreeze is true)
                 timeFrozenLabel = ", frozen manually";
             else if (this.ManualFreeze is false)
@@ -199,10 +185,8 @@ internal class ModEntry : Mod
         }
     }
 
-    /// <summary>Raised after the <see cref="Framework.TimeHelper.TickProgress"/> value changes.</summary>
-    /// <param name="sender">The event sender.</param>
-    /// <param name="e">The event arguments.</param>
-    private void OnTickProgressed(object sender, TickProgressChangedEventArgs e)
+    /// <summary>Raised after the <see cref="TimeHelper.TickProgress"/> value changes.</summary>
+    private void OnTickProgressed(object? sender, TickProgressChangedEventArgs e)
     {
         if (!this.ShouldEnable())
             return;
@@ -281,7 +265,7 @@ internal class ModEntry : Mod
             this.TickInterval = Math.Max(minAllowed, this.TickInterval - change);
         }
         else
-            this.TickInterval = this.TickInterval + change;
+            this.TickInterval += change;
 
         // log change
         this.Notifier.QuickNotify(
@@ -322,7 +306,7 @@ internal class ModEntry : Mod
 
     /// <summary>Update the time settings for the given location.</summary>
     /// <param name="location">The game location.</param>
-    private void UpdateSettingsForLocation(GameLocation location)
+    private void UpdateSettingsForLocation(GameLocation? location)
     {
         if (location == null)
             return;

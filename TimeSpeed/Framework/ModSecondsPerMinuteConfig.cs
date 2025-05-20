@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
+using cantorsdust.Common;
 using StardewValley;
 using StardewValley.Locations;
 
@@ -37,7 +39,7 @@ internal class ModSecondsPerMinuteConfig
     *********/
     /// <summary>Get the number of seconds per in-game minute for a given location.</summary>
     /// <param name="location">The location to check.</param>
-    public double GetSecondsPerMinute(GameLocation location)
+    public double GetSecondsPerMinute(GameLocation? location)
     {
         if (location == null)
             return this.Outdoors;
@@ -75,8 +77,11 @@ internal class ModSecondsPerMinuteConfig
     /// <summary>The method called after the config file is deserialized.</summary>
     /// <param name="context">The deserialization context.</param>
     [OnDeserialized]
+    [SuppressMessage("ReSharper", "NullCoalescingConditionIsAlwaysNotNullAccordingToAPIContract", Justification = SuppressReasons.ValidatesNullability)]
+    [SuppressMessage("ReSharper", "UnusedMember.Local", Justification = SuppressReasons.UsedViaReflection)]
+    [SuppressMessage("ReSharper", "UnusedParameter.Local", Justification = SuppressReasons.UsedViaReflection)]
     private void OnDeserializedMethod(StreamingContext context)
     {
-        this.ByLocationName = new(this.ByLocationName ?? new(), StringComparer.OrdinalIgnoreCase);
+        this.ByLocationName = new Dictionary<string, double>(this.ByLocationName ?? [], StringComparer.OrdinalIgnoreCase);
     }
 }
