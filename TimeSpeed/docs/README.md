@@ -26,9 +26,9 @@ key | effect
 
 ## Configure
 ### In-game settings
-If you have [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098) installed,
-you can click the cog button (⚙) on the title screen or the "mod options" button at the bottom of
-the in-game menu to configure the mod. Hover the cursor over a field for details, or see the next
+If you install [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098), you
+can click the cog button (⚙) on the title screen or the "mod options" button at the bottom of the
+in-game menu to configure the mod. Hover the cursor over a field for details, or see the next
 section.
 
 ![](screenshots/generic-config-menu.png)
