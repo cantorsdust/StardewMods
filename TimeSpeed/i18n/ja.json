@@ -44,6 +44,8 @@
     "config.freeze-time": "時間の停止",
     "config.anywhere-at-time.name": "停止する時刻",
     "config.anywhere-at-time.desc": "あらゆる場所で時間を止める時刻。600(午前6時)から2400(午前0時)、2600(午前2時)までの24時間のミリタリータイムでなければならない。2600に設定すると無効になる。",
+    "config.freeze-before-passing-out.name": "Freeze time before 2am", // TODO
+    "config.freeze-before-passing-out.desc": "Whether to freeze time everywhere before players pass out (i.e. at 1:50am). This is in addition to the '{{freezeTimeAt}}' option.", // TODO
     "config.freeze-time-indoors.name": "屋内",
     "config.freeze-time-indoors.desc": "屋内で時間を止めるかどうか。",
     "config.freeze-time-outdoors.name": "屋外",

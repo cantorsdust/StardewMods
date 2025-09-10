@@ -44,6 +44,8 @@
     "config.freeze-time": "Tiempo de congelación",
     "config.anywhere-at-time.name": "Tiempo de congelación en",
     "config.anywhere-at-time.desc": "La hora a la que se debe congelar el tiempo en todas partes. Debe ser la hora militar de 24 horas, desde las 600 (6am) hasta las 2400 (medianoche) y 2600 (2am). Puedes ponerlo en 2600 para desactivarlo.",
+    "config.freeze-before-passing-out.name": "Freeze time before 2am", // TODO
+    "config.freeze-before-passing-out.desc": "Whether to freeze time everywhere before players pass out (i.e. at 1:50am). This is in addition to the '{{freezeTimeAt}}' option.", // TODO
     "config.freeze-time-indoors.name": "En interiores",
     "config.freeze-time-indoors.desc": "Si congelar el tiempo en el interior.",
     "config.freeze-time-outdoors.name": "En exteriores",

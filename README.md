@@ -26,16 +26,16 @@ on the wiki for help contributing translations.
 
 &nbsp;     | All Professions                  | Instant Grow Trees                 | Recatch Legendary Fish                 | TimeSpeed
 :--------- | :------------------------------- | :--------------------------------- | :------------------------------------- | :--------------------------
-Chinese    | [❑](AllProfessions/i18n)         | [❑](InstantGrowTrees/i18n)         | [✓](RecatchLegendaryFish/i18n/zh.json) | [✓](TimeSpeed/i18n/zh.json)
-French     | [❑](AllProfessions/i18n)         | [❑](InstantGrowTrees/i18n)         | [❑](RecatchLegendaryFish/i18n)         | [✓](TimeSpeed/i18n/fr.json)
-German     | [❑](AllProfessions/i18n)         | [❑](InstantGrowTrees/i18n)         | [❑](RecatchLegendaryFish/i18n)         | [✓](TimeSpeed/i18n/de.json)
+Chinese    | [❑](AllProfessions/i18n)         | [❑](InstantGrowTrees/i18n)         | [✓](RecatchLegendaryFish/i18n/zh.json) | [↻](TimeSpeed/i18n/zh.json)
+French     | [❑](AllProfessions/i18n)         | [❑](InstantGrowTrees/i18n)         | [❑](RecatchLegendaryFish/i18n)         | [↻](TimeSpeed/i18n/fr.json)
+German     | [❑](AllProfessions/i18n)         | [❑](InstantGrowTrees/i18n)         | [❑](RecatchLegendaryFish/i18n)         | [↻](TimeSpeed/i18n/de.json)
 Hungarian  | [✓](AllProfessions/i18n/hu.json) | [❑](InstantGrowTrees/i18n)         | [❑](RecatchLegendaryFish/i18n)         | [❑](TimeSpeed/i18n)
-Italian    | [❑](AllProfessions/i18n)         | [❑](InstantGrowTrees/i18n)         | [❑](RecatchLegendaryFish/i18n)         | [✓](TimeSpeed/i18n/it.json)
-Japanese   | [✓](AllProfessions/i18n/ja.json) | [❑](InstantGrowTrees/i18n)         | [❑](RecatchLegendaryFish/i18n)         | [✓](TimeSpeed/i18n/ja.json)
-Korean     | [❑](AllProfessions/i18n)         | [✓](InstantGrowTrees/i18n/ko.json) | [✓](RecatchLegendaryFish/i18n/ko.json) | [✓](TimeSpeed/i18n/ko.json)
-Portuguese | [✓](AllProfessions/i18n/pt.json) | [✓](InstantGrowTrees/i18n/pt.json) | [✓](RecatchLegendaryFish/i18n/pt.json) | [✓](TimeSpeed/i18n/pt.json)
-Russian    | [✓](AllProfessions/i18n/ru.json) | [❑](InstantGrowTrees/i18n)         | [❑](RecatchLegendaryFish/i18n)         | [✓](TimeSpeed/i18n/ru.json)
-Spanish    | [✓](AllProfessions/i18n/es.json) | [✓](InstantGrowTrees/i18n/es.json) | [✓](RecatchLegendaryFish/i18n/es.json) | [✓](TimeSpeed/i18n/es.json)
+Italian    | [❑](AllProfessions/i18n)         | [❑](InstantGrowTrees/i18n)         | [❑](RecatchLegendaryFish/i18n)         | [↻](TimeSpeed/i18n/it.json)
+Japanese   | [✓](AllProfessions/i18n/ja.json) | [❑](InstantGrowTrees/i18n)         | [❑](RecatchLegendaryFish/i18n)         | [↻](TimeSpeed/i18n/ja.json)
+Korean     | [❑](AllProfessions/i18n)         | [✓](InstantGrowTrees/i18n/ko.json) | [✓](RecatchLegendaryFish/i18n/ko.json) | [↻](TimeSpeed/i18n/ko.json)
+Portuguese | [✓](AllProfessions/i18n/pt.json) | [✓](InstantGrowTrees/i18n/pt.json) | [✓](RecatchLegendaryFish/i18n/pt.json) | [↻](TimeSpeed/i18n/pt.json)
+Russian    | [✓](AllProfessions/i18n/ru.json) | [❑](InstantGrowTrees/i18n)         | [❑](RecatchLegendaryFish/i18n)         | [↻](TimeSpeed/i18n/ru.json)
+Spanish    | [✓](AllProfessions/i18n/es.json) | [✓](InstantGrowTrees/i18n/es.json) | [✓](RecatchLegendaryFish/i18n/es.json) | [↻](TimeSpeed/i18n/es.json)
 Turkish    | [❑](AllProfessions/i18n)         | [❑](InstantGrowTrees/i18n)         | [❑](RecatchLegendaryFish/i18n)         | [❑](TimeSpeed/i18n)
 
 ## Compiling the mods

@@ -44,6 +44,8 @@
     "config.freeze-time": "冻结时间",
     "config.anywhere-at-time.name": "什么时候冻结",
     "config.anywhere-at-time.desc": "设置自动冻结全地图时间的时间节点，600表示早上6点，2400表示凌晨2点，默认2400，表示禁用。",
+    "config.freeze-before-passing-out.name": "Freeze time before 2am", // TODO
+    "config.freeze-before-passing-out.desc": "Whether to freeze time everywhere before players pass out (i.e. at 1:50am). This is in addition to the '{{freezeTimeAt}}' option.", // TODO
     "config.freeze-time-indoors.name": "建筑内",
     "config.freeze-time-indoors.desc": "建筑内时是否冻结时间",
     "config.freeze-time-outdoors.name": "室外",

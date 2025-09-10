@@ -114,7 +114,7 @@ internal static class GenericModConfigMenuIntegration
         api.AddBoolOption(
             manifest,
             name: I18n.Config_FreezeBeforePassingOut_Name,
-            tooltip: I18n.Config_FreezeBeforePassingOut_Desc,
+            tooltip: () => I18n.Config_FreezeBeforePassingOut_Desc(freezeTimeAt: I18n.Config_AnywhereAtTime_Name()),
             getValue: () => getConfig().FreezeTime.PassOut,
             setValue: value => getConfig().FreezeTime.PassOut = value
         );
