@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using cantorsdust.Common.Integrations;
 using StardewModdingAPI;
+using StardewValley;
 
 namespace TimeSpeed.Framework;
 
@@ -102,15 +103,26 @@ internal static class GenericModConfigMenuIntegration
 
         // freeze time
         api.AddSectionTitle(manifest, I18n.Config_FreezeTime);
-        api.AddNumberOption(
-            manifest,
-            name: I18n.Config_AnywhereAtTime_Name,
-            tooltip: I18n.Config_AnywhereAtTime_Desc,
-            getValue: () => getConfig().FreezeTime.AnywhereAtTime ?? 2600,
-            setValue: value => getConfig().FreezeTime.AnywhereAtTime = (value == 2600 ? null : value),
-            min: 600,
-            max: 2600
-        );
+        {
+            static int ToValue(int time) => Utility.ConvertTimeToMinutes(time);
+            static int FromValue(int value) => Utility.ConvertMinutesToTime(value);
+
+            api.AddNumberOption(
+                manifest,
+                name: I18n.Config_AnywhereAtTime_Name,
+                tooltip: I18n.Config_AnywhereAtTime_Desc,
+                getValue: () => ToValue(getConfig().FreezeTime.AnywhereAtTime ?? 2600),
+                setValue: value =>
+                {
+                    int newTime = FromValue(value);
+                    getConfig().FreezeTime.AnywhereAtTime = newTime == 2600 ? null : newTime;
+                },
+                min: ToValue(600),
+                max: ToValue(2600),
+                interval: ToValue(10),
+                formatValue: value => Game1.getTimeOfDayString(FromValue(value))
+            );
+        }
         api.AddBoolOption(
             manifest,
             name: I18n.Config_FreezeBeforePassingOut_Name,
