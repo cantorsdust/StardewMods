@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using cantorsdust.Common;
 using Microsoft.Xna.Framework.Input;
 using StardewModdingAPI;
@@ -23,27 +24,19 @@ internal class ModEntry : Mod
     /// <summary>The mod configuration.</summary>
     private ModConfig Config;
 
-    /// <summary><c>True</c> if player has manually frozen time.</summary>
+    /// <summary>Whether the player has manually frozen time.</summary>
     private bool ManualFreeze;
-
-    /// <summary>Whether the player has manually overridden <see cref="AutoFreezeReason.FrozenForLocation"/>.</summary>
-    private bool FreezeOverrideLocation;
-
-    /// <summary>Whether the player has manually overridden <see cref="AutoFreezeReason.FrozenAtTime"/>.</summary>
-    private bool FreezeOverrideTime;
-
-    /// <summary>Whether the player has manually overridden <see cref="AutoFreezeReason.FrozenBeforePassOut"/>.</summary>
-    private bool FreezeOverridePassOut;
 
     /// <summary>The reason time would be frozen automatically if applicable, regardless of <see cref="ManualFreeze"/>.</summary>
     private AutoFreezeReason AutoFreeze = AutoFreezeReason.None;
 
+    /// <summary>The current auto-freeze reasons which the player has temporarily suspended until the relevant context changes.</summary>
+    private readonly HashSet<AutoFreezeReason> SuspendAutoFreezes = [];
+
     /// <summary>Whether time should be frozen.</summary>
     private bool IsTimeFrozen =>
-        this.ManualFreeze == true
-        || (this.AutoFreeze == AutoFreezeReason.FrozenForLocation && this.FreezeOverrideLocation == false)
-        || (this.AutoFreeze == AutoFreezeReason.FrozenBeforePassOut && this.FreezeOverridePassOut == false)
-        || (this.AutoFreeze == AutoFreezeReason.FrozenAtTime && this.FreezeOverrideTime == false);
+        this.ManualFreeze
+        || (this.AutoFreeze != AutoFreezeReason.None && !this.SuspendAutoFreezes.Contains(this.AutoFreeze));
 
     /// <summary>Whether the flow of time should be adjusted.</summary>
     private bool AdjustTime;
@@ -140,7 +133,7 @@ internal class ModEntry : Mod
             return;
 
         this.UpdateScaleForDay(Game1.season, Game1.dayOfMonth);
-        this.UpdateTimeFreeze(clearAllOverrides: true);
+        this.UpdateTimeFreeze(clearPreviousOverrides: true);
         this.UpdateSettingsForLocation(Game1.currentLocation);
     }
 
@@ -338,8 +331,9 @@ internal class ModEntry : Mod
         if (location == null)
             return;
 
-        // update time settings and clear location freeze-override flag
-        this.UpdateTimeFreeze(clearOverride: AutoFreezeReason.FrozenForLocation);
+        // update time settings
+        this.SuspendAutoFreezes.Remove(AutoFreezeReason.FrozenForLocation);
+        this.UpdateTimeFreeze();
         this.TickInterval = this.Config.GetMillisecondsPerMinute(location) * 10;
 
         // notify player
@@ -369,65 +363,30 @@ internal class ModEntry : Mod
     /// <summary>Update the <see cref="AutoFreeze"/> and <see cref="ManualFreeze"/> flags based on the current context.</summary>
     /// <param name="manualOverride">An explicit freeze (<c>true</c>) or unfreeze (<c>false</c>) requested by the player, if applicable.</param>
     /// <param name="clearPreviousOverrides">Whether to clear any previous explicit overrides.</param>
-    private void UpdateTimeFreeze(bool? manualOverride = null, AutoFreezeReason clearOverride = AutoFreezeReason.None, bool clearAllOverrides = false)
+    private void UpdateTimeFreeze(bool? manualOverride = null, bool clearPreviousOverrides = false)
     {
-        bool? wasManualFreeze = this.ManualFreeze;
+        bool wasManualFreeze = this.ManualFreeze;
         AutoFreezeReason wasAutoFreeze = this.AutoFreeze;
 
         // update auto freeze
         this.AutoFreeze = this.GetAutoFreezeType();
+        bool isAutoFrozen = this.AutoFreeze != AutoFreezeReason.None;
 
         // update manual freeze
         if (manualOverride.HasValue)
             this.ManualFreeze = manualOverride.Value;
 
-        // Clear marked override flags
-        switch (clearOverride)
-        {
-            case AutoFreezeReason.FrozenForLocation:
-                this.FreezeOverrideLocation = false;
-                break;
-            case AutoFreezeReason.FrozenAtTime:
-                this.FreezeOverrideTime = false;
-                break;
-            case AutoFreezeReason.FrozenBeforePassOut:
-                this.FreezeOverridePassOut = false;
-                break;
-            default:
-                break;
-        }
-
-        // Flag AutoFreeze overrides if manually unfrozen
-        if(manualOverride == false)
-        {
-            switch (this.AutoFreeze)
-            {
-                case AutoFreezeReason.FrozenForLocation:
-                    this.FreezeOverrideLocation = true;
-                    break;
-                case AutoFreezeReason.FrozenAtTime:
-                    this.FreezeOverrideTime = true;
-                    break;
-                case AutoFreezeReason.FrozenBeforePassOut:
-                    this.FreezeOverridePassOut = true;
-                    break;
-            }
-        }
-
-        // clear Freeze overrides if no longer needed or marked for clearing
-        if (this.ManualFreeze == false && this.AutoFreeze == AutoFreezeReason.None
-            || clearAllOverrides)
-        {
-            this.FreezeOverrideLocation = false;
-            this.FreezeOverridePassOut = false;
-            this.FreezeOverrideTime = false;
-        }
+        // update overrides
+        if (clearPreviousOverrides || !isAutoFrozen)
+            this.SuspendAutoFreezes.Clear();
+        if (manualOverride == false && isAutoFrozen)
+            this.SuspendAutoFreezes.Add(this.AutoFreeze);
 
         // log change
         if (wasAutoFreeze != this.AutoFreeze)
             this.Monitor.Log($"Auto freeze changed from {wasAutoFreeze} to {this.AutoFreeze}.");
         if (wasManualFreeze != this.ManualFreeze)
-            this.Monitor.Log($"Manual freeze changed from {wasManualFreeze?.ToString() ?? "null"} to {this.ManualFreeze}.");
+            this.Monitor.Log($"Manual freeze changed from {wasManualFreeze} to {this.ManualFreeze}.");
     }
 
     /// <summary>Update the time settings for the given date.</summary>
@@ -453,7 +412,7 @@ internal class ModEntry : Mod
         if (this.Config.ShouldFreeze(Game1.currentLocation))
             return AutoFreezeReason.FrozenForLocation;
 
-        if (this.Config.ShouldFreeze(Game1.timeOfDay, passOutCheck: true))
+        if (this.Config.ShouldFreezeBeforePassingOut(Game1.timeOfDay))
             return AutoFreezeReason.FrozenBeforePassOut;
 
         if (this.Config.ShouldFreeze(Game1.timeOfDay))
