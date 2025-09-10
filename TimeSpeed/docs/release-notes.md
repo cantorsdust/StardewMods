@@ -2,6 +2,9 @@
 
 # Release notes
 ## Upcoming release
+* Added 'Freeze time before 2am' option (thanks to MickeyMik!).
+* Manual unfreezes now work in a more intuitive way (thanks to MickeyMik!).  
+  _When you manually unfreeze time, that now only applies for the current freeze reason. For example, if you unfreeze time after a freeze-at-time and then move to a location where time should be frozen, time will correctly re-freeze since you overrode freeze-at-time but not freeze-at-location._
 * Improved translations. Thanks to SummerFleur2997 (updated Chinese)!
 
 ## 2.7.10
