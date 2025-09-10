@@ -37,11 +37,18 @@ internal class ModConfig
         return this.FreezeTime.ShouldFreeze(location);
     }
 
-    /// <summary>Get whether the time should be frozen at a given time of day.</summary>
+    /// <summary>Get whether the time should be frozen at a given time of day based on the <see cref="ModFreezeTimeConfig.AnywhereAtTime"/> option.</summary>
     /// <param name="time">The time of day in 24-hour military format (e.g. 1600 for 8pm).</param>
     public bool ShouldFreeze(int time)
     {
         return time >= this.FreezeTime.AnywhereAtTime;
+    }
+
+    /// <summary>Get whether the time should be frozen at a given time of day based on the <see cref="ModFreezeTimeConfig.PassOut"/> option.</summary>
+    /// <param name="time">The time of day in 24-hour military format (e.g. 1600 for 8pm).</param>
+    public bool ShouldFreezeBeforePassingOut(int time)
+    {
+        return time >= 2550 && this.FreezeTime.PassOut;
     }
 
     /// <summary>Get whether time settings should be applied on a given day.</summary>
