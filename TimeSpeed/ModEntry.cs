@@ -190,9 +190,9 @@ internal class ModEntry : Mod
         if (e.IsOneSecond && this.Monitor.IsVerbose)
         {
             string timeFrozenLabel;
-            if (this.ManualFreeze is true)
+            if (this.ManualFreeze)
                 timeFrozenLabel = ", frozen manually";
-            else if (this.ManualFreeze is false)
+            else if (this.SuspendAutoFreezes.Contains(this.AutoFreeze))
                 timeFrozenLabel = ", resumed manually";
             else if (this.IsTimeFrozen)
                 timeFrozenLabel = $", frozen per {this.AutoFreeze}";
