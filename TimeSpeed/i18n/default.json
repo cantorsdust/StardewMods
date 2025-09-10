@@ -13,7 +13,6 @@
 
     // changed based on location
     "message.on-location-change.time-stopped-globally": "Looks like time stopped everywhere...",
-    "message.on-location-change.time-stopped-globally-pass-out": "Time stopped, am I dreaming?",
     "message.on-location-change.time-stopped-here": "It feels like time is frozen here...",
     "message.on-location-change.time-speed-here": "10 minutes feels more like {{seconds}} seconds here...",
 

@@ -342,15 +342,12 @@ internal class ModEntry : Mod
             switch (this.AutoFreeze)
             {
                 case AutoFreezeReason.FrozenAtTime when this.IsTimeFrozen:
+                case AutoFreezeReason.FrozenBeforePassOut when this.IsTimeFrozen:
                     this.Notifier.ShortNotify(I18n.Message_OnLocationChange_TimeStoppedGlobally());
                     break;
 
                 case AutoFreezeReason.FrozenForLocation when this.IsTimeFrozen:
                     this.Notifier.ShortNotify(I18n.Message_OnLocationChange_TimeStoppedHere());
-                    break;
-
-                case AutoFreezeReason.FrozenBeforePassOut when this.IsTimeFrozen:
-                    this.Notifier.ShortNotify(I18n.Message_OnLocationChange_TimeStoppedGloballyPassOut());
                     break;
 
                 default:
