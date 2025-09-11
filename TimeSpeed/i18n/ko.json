@@ -16,6 +16,10 @@
     "message.on-location-change.time-stopped-here": "여기 시간이 멈췄습니다",
     "message.on-location-change.time-speed-here": "여기서 10분이 {{seconds}}초처럼 느껴집니다.",
 
+    // multiplayer messages
+    // TODO
+    "message.host-missing-mod": "You can't change time because the main player doesn't have TimeSpeed installed.",
+
 
     /*********
     ** Generic Mod Config Menu UI

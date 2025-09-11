@@ -457,7 +457,17 @@ internal class ModEntry : Mod
     /// <param name="message">The message to send.</param>
     private void SendMessageToHost<TMessage>(TMessage message)
     {
+        // check host info
+        long hostPlayerId = Game1.MasterPlayer.UniqueMultiplayerID;
+        IMultiplayerPeerMod? hostMod = this.Helper.Multiplayer.GetConnectedPlayer(hostPlayerId)?.GetMod(this.ModManifest.UniqueID);
+        if (hostMod is null || hostMod.Version.IsOlderThan("2.8.0"))
+        {
+            this.Notifier.OnAccessDeniedFromHost(I18n.Message_HostMissingMod());
+            return;
+        }
+
+        // send message
         string messageType = message.GetType().Name;
-        this.Helper.Multiplayer.SendMessage(message, messageType, modIDs: [this.ModManifest.UniqueID], playerIDs: [Game1.MasterPlayer.UniqueMultiplayerID]);
+        this.Helper.Multiplayer.SendMessage(message, messageType, modIDs: [this.ModManifest.UniqueID], playerIDs: [hostPlayerId]);
     }
 }

@@ -16,6 +16,10 @@
     "message.on-location-change.time-stopped-here": "Parece que el tiempo está congelado aquí...",
     "message.on-location-change.time-speed-here": "10 minutos serán {{seconds}} segundos aquí...",
 
+    // multiplayer messages
+    // TODO
+    "message.host-missing-mod": "You can't change time because the main player doesn't have TimeSpeed installed.",
+
 
     /*********
     ** Generic Mod Config Menu UI
