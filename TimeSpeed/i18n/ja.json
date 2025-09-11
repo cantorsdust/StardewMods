@@ -21,7 +21,7 @@
     ** Generic Mod Config Menu UI
     *********/
     // warnings
-    "config.farmhand-info.desc": "You are loaded into the current save as a farmhand. The host options have been removed.", // TODO
+    "config.farmhand-warning": "The host player's options apply for this save. You can still edit the options below, but only the controls will do anything as a farmhand.", // TODO
 
     // general options
     "config.general-options": "一般設定",

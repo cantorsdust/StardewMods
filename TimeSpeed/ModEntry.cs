@@ -102,7 +102,7 @@ internal class ModEntry : Mod
     /// <param name="e">The event arguments.</param>
     private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
     {
-        this.RenderGenericModConfigMenu();
+        this.RegisterConfigMenu();
     }
 
     /// <inheritdoc cref="IGameLoopEvents.SaveLoaded"/>
@@ -110,7 +110,7 @@ internal class ModEntry : Mod
     /// <param name="e">The event arguments.</param>
     private void OnSaveLoaded(object sender, SaveLoadedEventArgs e)
     {
-        this.RenderGenericModConfigMenu();
+        this.RegisterConfigMenu();
     }
 
     /// <summary>Handles incoming commands from other farmhands wanting to control time.</summary>
@@ -298,12 +298,12 @@ internal class ModEntry : Mod
         this.Notifier.OnConfigReloaded();
     }
 
-    /// <summary>Register Generic Mod Config Menu</summary>
-    private void RenderGenericModConfigMenu()
+    /// <summary>Register or update the config menu with Generic Mod Config Menu.</summary>
+    private void RegisterConfigMenu()
     {
         GenericModConfigMenuIntegration.Register(this.ModManifest, this.Helper.ModRegistry, this.Monitor,
             getConfig: () => this.Config,
-            reset: () => this.Config = new(),
+            reset: () => this.Config = new ModConfig(),
             save: () =>
             {
                 this.Helper.WriteConfig(this.Config);
