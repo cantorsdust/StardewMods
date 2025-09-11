@@ -32,7 +32,7 @@ internal numeric ID. Note that this file will be reset when you update, so you'l
 your changes each time.
 
 ## Compatibility
-* Works with Stardew Valley 1.6+ on Linux/macOS/Windows.
+* Works with Stardew Valley 1.6.15+ on Linux/macOS/Windows.
 * Works in single-player, multiplayer, and split-screen mode.
 * No known mod conflicts.
 

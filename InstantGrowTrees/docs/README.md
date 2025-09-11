@@ -25,7 +25,7 @@ in-game menu to configure the mod. Hover the cursor over a field for details.
 ![](screenshots/generic-config-menu.png)
 
 ## Compatibility
-* Works with Stardew Valley 1.6+ on Linux/macOS/Windows.
+* Works with Stardew Valley 1.6.15+ on Linux/macOS/Windows.
 * Works in single-player, multiplayer, and split-screen mode.
 * No known mod conflicts.
 
