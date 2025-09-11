@@ -88,6 +88,13 @@ internal class Notifier
         }
     }
 
+    /// <summary>Send notifications when changing time fails because the host doesn't support or allow that.</summary>
+    /// <param name="message">The translated message to display.</param>
+    public void OnAccessDeniedFromHost(string message)
+    {
+        Game1.addHUDMessage(new HUDMessage(message, HUDMessage.error_type) { timeLeft = 2000 });
+    }
+
     /// <summary>Send notifications when the local configuration is reloaded.</summary>
     public void OnConfigReloaded()
     {

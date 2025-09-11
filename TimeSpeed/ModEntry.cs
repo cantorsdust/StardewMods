@@ -55,12 +55,13 @@ internal class ModEntry : Mod
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
+        // init
         I18n.Init(helper.Translation);
         CommonHelper.RemoveObsoleteFiles(this, "TimeSpeed.pdb");
+        this.Notifier = new Notifier(this.Helper.Multiplayer, this.ModManifest.UniqueID, this.Monitor);
 
         // read config
         this.Config = helper.ReadConfig<ModConfig>();
-        this.Notifier = new Notifier(this.Helper.Multiplayer, this.ModManifest.UniqueID, this.Monitor);
 
         // add time events
         this.TimeHelper.WhenTickProgressChanged(this.OnTickProgressed);
@@ -113,7 +114,7 @@ internal class ModEntry : Mod
         this.RegisterConfigMenu();
     }
 
-    /// <summary>Handles incoming commands from other farmhands wanting to control time.</summary>
+    /// <inheritdoc cref="IMultiplayerEvents.ModMessageReceived"/>
     private void OnModMessageReceived(object sender, ModMessageReceivedEventArgs e)
     {
         if (e.FromModID != this.ModManifest.UniqueID || e.FromPlayerID == Game1.player.UniqueMultiplayerID)
@@ -124,16 +125,32 @@ internal class ModEntry : Mod
             // from farmhand: request to (un)freeze time
             case nameof(ToggleFreezeMessage):
                 if (Context.IsMainPlayer)
-                    this.ToggleFreeze(fromPlayerId: e.FromPlayerID);
+                {
+                    if (!this.Config.LetFarmhandsManageTime)
+                        this.RejectRequestFromFarmhand("toggle time freeze", e.FromPlayerID);
+                    else
+                        this.ToggleFreeze(fromPlayerId: e.FromPlayerID);
+                }
+
                 break;
 
             // from farmhand: request to change time speed
             case nameof(ChangeTickIntervalMessage):
                 if (Context.IsMainPlayer)
                 {
-                    var message = e.ReadAs<ChangeTickIntervalMessage>();
-                    this.ChangeTickInterval(message.Increase, message.Change, fromPlayerId: e.FromPlayerID);
+                    if (!this.Config.LetFarmhandsManageTime)
+                        this.RejectRequestFromFarmhand("change time speed", e.FromPlayerID);
+                    else
+                    {
+                        var message = e.ReadAs<ChangeTickIntervalMessage>();
+                        this.ChangeTickInterval(message.Increase, message.Change, fromPlayerId: e.FromPlayerID);
+                    }
                 }
+                break;
+
+            // from host: access denied
+            case nameof(RequestDeniedMessage):
+                this.Notifier.OnAccessDeniedFromHost(I18n.Message_HostAccessDenied());
                 break;
 
             // from host: time speed changed
@@ -469,5 +486,17 @@ internal class ModEntry : Mod
         // send message
         string messageType = message.GetType().Name;
         this.Helper.Multiplayer.SendMessage(message, messageType, modIDs: [this.ModManifest.UniqueID], playerIDs: [hostPlayerId]);
+    }
+
+    /// <summary>Reject a request to control the time from a farmhand.</summary>
+    /// <param name="actionLabel">A human-readable label for the attempted change (like 'toggle time freeze') for logged messages.</param>
+    /// <param name="farmhandId">The farmhand who requested the change.</param>
+    private void RejectRequestFromFarmhand(string actionLabel, long farmhandId)
+    {
+        string farmhandName = Game1.GetPlayer(farmhandId)?.Name ?? farmhandId.ToString();
+
+        this.Monitor.Log($"Rejected request from {farmhandName} to {actionLabel}, because you disabled that in the mod options.", LogLevel.Info);
+
+        this.Helper.Multiplayer.SendMessage(new RequestDeniedMessage(), nameof(RequestDeniedMessage), modIDs: [this.ModManifest.UniqueID], playerIDs: [farmhandId]);
     }
 }

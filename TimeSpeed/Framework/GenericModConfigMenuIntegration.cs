@@ -176,6 +176,16 @@ internal static class GenericModConfigMenuIntegration
             )
         );
 
+        // multiplayer
+        api.AddSectionTitle(manifest, I18n.Config_Multiplayer);
+        api.AddBoolOption(
+            manifest,
+            name: I18n.Config_LetFarmhandsManageTime_Name,
+            tooltip: I18n.Config_LetFarmhandsManageTime_Description,
+            getValue: () => getConfig().LetFarmhandsManageTime,
+            setValue: value => getConfig().LetFarmhandsManageTime = value
+        );
+
         // controls
         api.AddSectionTitle(manifest, I18n.Config_Controls);
         api.AddKeybindList(

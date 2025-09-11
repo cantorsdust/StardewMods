@@ -19,6 +19,7 @@
     // multiplayer messages
     // TODO
     "message.host-missing-mod": "You can't change time because the main player doesn't have TimeSpeed installed.",
+    "message.host-access-denied": "You can't change time because the main player doesn't allow that.",
 
 
     /*********
@@ -65,6 +66,12 @@
     "config.freeze-time-freeze-names.desc": "Die Namen bestimmter Orte, an denen die Zeit eingefroren werden soll. Standortnamen können im Spiel mit dem Debug-Modus-Mod angezeigt werden. Du kannst mehrere mit Kommas auflisten.",
     "config.freeze-time-dont-freeze-names.name": "Bestimmte Orte Zeit nicht einfrieren",
     "config.freeze-time-dont-freeze-names.desc": "Die Namen bestimmter Orte, an denen die Zeit nicht eingefroren werden soll, unabhängig von den vorherigen Einstellungen. Standortnamen können im Spiel mit dem Debug-Modus-Mod angezeigt werden. Du kannst mehrere mit Kommas auflisten.",
+
+    // multiplayer options
+    // TODO
+    "config.multiplayer": "Multiplayer",
+    "config.let-farmhands-manage-time.name": "Let farmhands manage time",
+    "config.let-farmhands-manage-time.description": "When you're hosting a save in multiplayer mode, whether other players can freeze or change the time speed if they have the mod installed too.",
 
     // controls
     "config.controls": "Steuerungs Optionen",
