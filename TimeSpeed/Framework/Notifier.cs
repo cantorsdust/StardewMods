@@ -36,32 +36,34 @@ internal class Notifier
 
     /// <summary>Send notifications when the tick interval changes.</summary>
     /// <param name="newInterval">The new tick interval.</param>
-    public void OnSpeedChanged(int newInterval)
+    /// <param name="fromPlayerId">The player which requested the change, if applicable.</param>
+    public void OnSpeedChanged(int newInterval, long? fromPlayerId = null)
     {
         this.QuickNotify(I18n.Message_SpeedChanged(seconds: newInterval / 1000));
 
-        this.Monitor.Log($"Tick length set to {newInterval / 1000d:0.##} seconds.", LogLevel.Info);
+        this.Monitor.Log($"Tick length set to {newInterval / 1000d:0.##} seconds{this.GetAsRequestedByString(fromPlayerId)}.", LogLevel.Info);
 
-        this.SendMessageToFarmhands(new NotifyTickIntervalChangedMessage { NewInterval = newInterval });
+        this.SendMessageToFarmhands(new NotifyTickIntervalChangedMessage { NewInterval = newInterval, FromPlayerId = fromPlayerId ?? Game1.player.UniqueMultiplayerID });
     }
 
     /// <summary>Send notifications when time is frozen or unfrozen.</summary>
     /// <param name="frozen">Whether time is now frozen (true) or unfrozen (false).</param>
     /// <param name="logMessage">A log message which explains why the time freeze changed, or <c>null</c> for a generic time frozen/unfrozen message.</param>
-    public void OnTimeFreezeToggled(bool frozen, string logMessage = null)
+    /// <param name="fromPlayerId">The player which requested the change, if applicable.</param>
+    public void OnTimeFreezeToggled(bool frozen, string logMessage = null, long? fromPlayerId = null)
     {
         if (frozen)
         {
             this.QuickNotify(I18n.Message_TimeStopped());
-            this.Monitor.Log(logMessage ?? "Time is frozen globally.", LogLevel.Info);
+            this.Monitor.Log(logMessage ?? $"Time is frozen globally{this.GetAsRequestedByString(fromPlayerId)}.", LogLevel.Info);
         }
         else
         {
             this.QuickNotify(I18n.Message_TimeResumed());
-            this.Monitor.Log(logMessage ?? "Time has resumed.", LogLevel.Info);
+            this.Monitor.Log(logMessage ?? $"Time has resumed{this.GetAsRequestedByString(fromPlayerId)}.", LogLevel.Info);
         }
 
-        this.SendMessageToFarmhands(new NotifyFreezeChangedMessage { IsFrozen = frozen });
+        this.SendMessageToFarmhands(new NotifyFreezeChangedMessage { IsFrozen = frozen, FromPlayerId = fromPlayerId ?? Game1.player.UniqueMultiplayerID });
     }
 
     /// <summary>Send notifications when the local player enters a location.</summary>
@@ -121,5 +123,16 @@ internal class Notifier
 
             this.Multiplayer.SendMessage(message, messageType, modIDs: this.ModId);
         }
+    }
+
+    /// <summary>Get an 'as requested by {playerName}' message if a player ID is specified.</summary>
+    /// <param name="playerId">The ID of the player who requested the change, if applicable.</param>
+    private string? GetAsRequestedByString(long? playerId)
+    {
+        if (playerId is null || playerId == Game1.player.UniqueMultiplayerID)
+            return null;
+
+        string playerName = Game1.GetPlayer(playerId.Value)?.Name ?? playerId.ToString();
+        return $" as requested by {playerName}";
     }
 }

@@ -124,7 +124,7 @@ internal class ModEntry : Mod
             // from farmhand: request to (un)freeze time
             case nameof(ToggleFreezeMessage):
                 if (Context.IsMainPlayer)
-                    this.ToggleFreeze();
+                    this.ToggleFreeze(fromPlayerId: e.FromPlayerID);
                 break;
 
             // from farmhand: request to change time speed
@@ -132,7 +132,7 @@ internal class ModEntry : Mod
                 if (Context.IsMainPlayer)
                 {
                     var message = e.ReadAs<ChangeTickIntervalMessage>();
-                    this.ChangeTickInterval(message.Increase, message.Change);
+                    this.ChangeTickInterval(message.Increase, message.Change, fromPlayerId: e.FromPlayerID);
                 }
                 break;
 
@@ -141,7 +141,7 @@ internal class ModEntry : Mod
                 if (!Context.IsMainPlayer)
                 {
                     var message = e.ReadAs<NotifyTickIntervalChangedMessage>();
-                    this.Notifier.OnSpeedChanged(message.NewInterval);
+                    this.Notifier.OnSpeedChanged(message.NewInterval, fromPlayerId: message.FromPlayerId);
                 }
                 break;
 
@@ -150,7 +150,7 @@ internal class ModEntry : Mod
                 if (!Context.IsMainPlayer)
                 {
                     var message = e.ReadAs<NotifyFreezeChangedMessage>();
-                    this.Notifier.OnTimeFreezeToggled(frozen: message.IsFrozen);
+                    this.Notifier.OnTimeFreezeToggled(frozen: message.IsFrozen, fromPlayerId: message.FromPlayerId);
                 }
                 break;
         }
@@ -316,7 +316,8 @@ internal class ModEntry : Mod
     /// <summary>Increment or decrement the tick interval, taking into account the held modifier key if applicable.</summary>
     /// <param name="increase">Whether to increment the tick interval; else decrement.</param>
     /// <param name="amount">The absolute amount by which to change the tick interval, or <c>null</c> to get the default amount based on the local pressed keys.</param>
-    private void ChangeTickInterval(bool increase, int? amount = null)
+    /// <param name="fromPlayerId">The player which requested the change, if applicable.</param>
+    private void ChangeTickInterval(bool increase, int? amount = null, long? fromPlayerId = null)
     {
         // get offset to apply
         int change = amount ?? 1000;
@@ -348,11 +349,12 @@ internal class ModEntry : Mod
             this.TickInterval = this.TickInterval + change;
 
         // log change
-        this.Notifier.OnSpeedChanged(this.TickInterval);
+        this.Notifier.OnSpeedChanged(this.TickInterval, fromPlayerId);
     }
 
     /// <summary>Toggle whether time is frozen.</summary>
-    private void ToggleFreeze()
+    /// <param name="fromPlayerId">The player which requested the change, if applicable.</param>
+    private void ToggleFreeze(long? fromPlayerId = null)
     {
         // ask host to toggle freeze if needed
         if (!Context.IsMainPlayer)
@@ -364,7 +366,7 @@ internal class ModEntry : Mod
         // apply
         bool freeze = !this.IsTimeFrozen;
         this.UpdateTimeFreeze(manualOverride: freeze);
-        this.Notifier.OnTimeFreezeToggled(frozen: freeze);
+        this.Notifier.OnTimeFreezeToggled(frozen: freeze, fromPlayerId: fromPlayerId);
     }
 
     /// <summary>Update the time freeze settings for the given time of day.</summary>

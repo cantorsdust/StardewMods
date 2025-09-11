@@ -5,4 +5,7 @@ internal class NotifyTickIntervalChangedMessage
 {
     /// <summary>The new tick interval.</summary>
     public int NewInterval { get; set; }
+
+    /// <summary>The player who requested the change.</summary>
+    public long FromPlayerId { get; set; }
 }
