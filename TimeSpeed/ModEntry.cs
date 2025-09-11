@@ -5,6 +5,7 @@ using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
 using TimeSpeed.Framework;
+using TimeSpeed.Framework.Messages;
 
 namespace TimeSpeed;
 
@@ -59,7 +60,7 @@ internal class ModEntry : Mod
 
         // read config
         this.Config = helper.ReadConfig<ModConfig>();
-        this.Notifier = new Notifier(this.Helper, this.ModManifest);
+        this.Notifier = new Notifier(this.Helper.Multiplayer, this.ModManifest.UniqueID, this.Monitor);
 
         // add time events
         this.TimeHelper.WhenTickProgressChanged(this.OnTickProgressed);
@@ -69,8 +70,8 @@ internal class ModEntry : Mod
         helper.Events.GameLoop.TimeChanged += this.OnTimeChanged;
         helper.Events.GameLoop.DayStarted += this.OnDayStarted;
         helper.Events.Input.ButtonsChanged += this.OnButtonsChanged;
-        helper.Events.Player.Warped += this.OnWarped;
         helper.Events.Multiplayer.ModMessageReceived += this.OnModMessageReceived;
+        helper.Events.Player.Warped += this.OnWarped;
 
         // add time freeze/unfreeze notification
         {
@@ -113,25 +114,45 @@ internal class ModEntry : Mod
     }
 
     /// <summary>Handles incoming commands from other farmhands wanting to control time.</summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     private void OnModMessageReceived(object sender, ModMessageReceivedEventArgs e)
     {
-        if (e.FromModID == this.ModManifest.UniqueID)
+        if (e.FromModID != this.ModManifest.UniqueID || e.FromPlayerID == Game1.player.UniqueMultiplayerID)
+            return;
+
+        switch (e.Type)
         {
-            // Messages for the host
-            if (Context.IsMainPlayer)
-            {
-                if (e.Type == MessageType.ToggleFreeze) this.ToggleFreeze();
-                else if (e.Type == MessageType.IncreaseTickInterval) this.ChangeTickInterval(true, e.ReadAs<int>());
-                else if (e.Type == MessageType.DecreaseTickInterval) this.ChangeTickInterval(false, e.ReadAs<int>());
-            }
-            // Messages for the farmhands
-            else
-            {
-                if (e.Type == MessageType.QuickNotify) this.Notifier.QuickNotify(e.ReadAs<string>());
-                else if (e.Type == MessageType.ShortNotify) this.Notifier.ShortNotify(e.ReadAs<string>());
-            }
+            // from farmhand: request to (un)freeze time
+            case nameof(ToggleFreezeMessage):
+                if (Context.IsMainPlayer)
+                    this.ToggleFreeze();
+                break;
+
+            // from farmhand: request to change time speed
+            case nameof(ChangeTickIntervalMessage):
+                if (Context.IsMainPlayer)
+                {
+                    var message = e.ReadAs<ChangeTickIntervalMessage>();
+                    this.ChangeTickInterval(message.Increase, message.Change);
+                }
+                break;
+
+            // from host: time speed changed
+            case nameof(NotifyTickIntervalChangedMessage):
+                if (!Context.IsMainPlayer)
+                {
+                    var message = e.ReadAs<NotifyTickIntervalChangedMessage>();
+                    this.Notifier.OnSpeedChanged(message.NewInterval);
+                }
+                break;
+
+            // from host: time (un)frozen
+            case nameof(NotifyFreezeChangedMessage):
+                if (!Context.IsMainPlayer)
+                {
+                    var message = e.ReadAs<NotifyFreezeChangedMessage>();
+                    this.Notifier.OnTimeFreezeToggled(frozen: message.IsFrozen);
+                }
+                break;
         }
     }
 
@@ -274,7 +295,7 @@ internal class ModEntry : Mod
         this.Config = this.Helper.ReadConfig<ModConfig>();
         this.UpdateScaleForDay(Game1.season, Game1.dayOfMonth);
         this.UpdateSettingsForLocation(Game1.currentLocation);
-        this.Notifier.ShortNotify(I18n.Message_ConfigReloaded());
+        this.Notifier.OnConfigReloaded();
     }
 
     /// <summary>Register Generic Mod Config Menu</summary>
@@ -294,12 +315,13 @@ internal class ModEntry : Mod
 
     /// <summary>Increment or decrement the tick interval, taking into account the held modifier key if applicable.</summary>
     /// <param name="increase">Whether to increment the tick interval; else decrement.</param>
-    private void ChangeTickInterval(bool increase, int change = 0)
+    /// <param name="amount">The absolute amount by which to change the tick interval, or <c>null</c> to get the default amount based on the local pressed keys.</param>
+    private void ChangeTickInterval(bool increase, int? amount = null)
     {
-        // If no change specific or 0, we get the defaults
-        if (change == 0)
+        // get offset to apply
+        int change = amount ?? 1000;
+        if (!amount.HasValue)
         {
-            change = 1000;
             KeyboardState state = Keyboard.GetState();
             if (state.IsKeyDown(Keys.LeftControl))
                 change *= 100;
@@ -309,10 +331,10 @@ internal class ModEntry : Mod
                 change /= 10;
         }
 
-        // If not the host, notify the host to change the tick interval
+        // ask host to change the tick interval if needed
         if (!Context.IsMainPlayer)
         {
-            this.Helper.Multiplayer.SendMessage(change, MessageType.TickInterval(increase), modIDs: [this.ModManifest.UniqueID]);
+            this.SendMessageToHost(new ChangeTickIntervalMessage { Change = change, Increase = increase });
             return;
         }
 
@@ -326,34 +348,23 @@ internal class ModEntry : Mod
             this.TickInterval = this.TickInterval + change;
 
         // log change
-        this.Notifier.QuickNotify(
-            I18n.Message_SpeedChanged(seconds: this.TickInterval / 1000)
-        );
-        this.Monitor.Log($"Tick length set to {this.TickInterval / 1000d:0.##} seconds.", LogLevel.Info);
+        this.Notifier.OnSpeedChanged(this.TickInterval);
     }
 
     /// <summary>Toggle whether time is frozen.</summary>
     private void ToggleFreeze()
     {
-        // If not the host, notify the server to ToggleFreeze
+        // ask host to toggle freeze if needed
         if (!Context.IsMainPlayer)
         {
-            this.Helper.Multiplayer.SendMessage("Toggle server freeze.", MessageType.ToggleFreeze, modIDs: new[] { this.ModManifest.UniqueID });
+            this.SendMessageToHost(new ToggleFreezeMessage());
             return;
         }
 
-        if (!this.IsTimeFrozen)
-        {
-            this.UpdateTimeFreeze(manualOverride: true);
-            this.Notifier.QuickNotify(I18n.Message_TimeStopped());
-            this.Monitor.Log("Time is frozen globally.", LogLevel.Info);
-        }
-        else
-        {
-            this.UpdateTimeFreeze(manualOverride: false);
-            this.Notifier.QuickNotify(I18n.Message_TimeResumed());
-            this.Monitor.Log($"Time is resumed at \"{Game1.currentLocation.Name}\".", LogLevel.Info);
-        }
+        // apply
+        bool freeze = !this.IsTimeFrozen;
+        this.UpdateTimeFreeze(manualOverride: freeze);
+        this.Notifier.OnTimeFreezeToggled(frozen: freeze);
     }
 
     /// <summary>Update the time freeze settings for the given time of day.</summary>
@@ -363,10 +374,7 @@ internal class ModEntry : Mod
         this.UpdateTimeFreeze();
 
         if (!wasFrozen && this.IsTimeFrozen)
-        {
-            this.Notifier.ShortNotify(I18n.Message_OnTimeChange_TimeStopped());
-            this.Monitor.Log($"Time automatically set to frozen at {Game1.timeOfDay}.", LogLevel.Info);
-        }
+            this.Notifier.OnTimeFreezeToggled(frozen: true, logMessage: $"Time automatically set to frozen at {Game1.timeOfDay}.");
     }
 
     /// <summary>Update the time settings for the given location.</summary>
@@ -382,22 +390,7 @@ internal class ModEntry : Mod
 
         // notify player
         if (this.Config.LocationNotify)
-        {
-            switch (this.AutoFreeze)
-            {
-                case AutoFreezeReason.FrozenAtTime when this.IsTimeFrozen:
-                    this.Notifier.ShortNotify(I18n.Message_OnLocationChange_TimeStoppedGlobally());
-                    break;
-
-                case AutoFreezeReason.FrozenForLocation when this.IsTimeFrozen:
-                    this.Notifier.ShortNotify(I18n.Message_OnLocationChange_TimeStoppedHere());
-                    break;
-
-                default:
-                    this.Notifier.ShortNotify(I18n.Message_OnLocationChange_TimeSpeedHere(seconds: this.TickInterval / 1000));
-                    break;
-            }
-        }
+            this.Notifier.OnLocalLocationChanged(this.IsTimeFrozen, this.TickInterval, this.AutoFreeze);
     }
 
     /// <summary>Update the <see cref="AutoFreeze"/> and <see cref="ManualFreeze"/> flags based on the current context.</summary>
@@ -455,5 +448,14 @@ internal class ModEntry : Mod
             return AutoFreezeReason.FrozenAtTime;
 
         return AutoFreezeReason.None;
+    }
+
+    /// <summary>Send a multiplayer message to the host player.</summary>
+    /// <typeparam name="TMessage">The message type to send.</typeparam>
+    /// <param name="message">The message to send.</param>
+    private void SendMessageToHost<TMessage>(TMessage message)
+    {
+        string messageType = message.GetType().Name;
+        this.Helper.Multiplayer.SendMessage(message, messageType, modIDs: [this.ModManifest.UniqueID], playerIDs: [Game1.MasterPlayer.UniqueMultiplayerID]);
     }
 }
