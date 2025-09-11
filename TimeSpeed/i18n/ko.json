@@ -5,7 +5,7 @@
     // changed manually
     "message.config-reloaded": "지금은 시간이 다르게 느껴집니다.",
     "message.speed-changed": "10분이 {{seconds}}초처럼 느껴집니다.",
-    "message.time-stopped": "시간이 멈췄다...",
+    "message.time-stopped": "Time has stopped...", // TODO
     "message.time-resumed": "이제 시간이 평소와 같이 느껴집니다.",
 
     // changed based on time
@@ -20,8 +20,8 @@
     /*********
     ** Generic Mod Config Menu UI
     *********/
-    // global descriptions
-    "config.farmhand-info.desc": "당신은 농장주로 현재 저장 파일에 로드됩니다. 호스트 옵션이 제거되었습니다.",
+    // warnings
+    "config.farmhand-info.desc": "You are loaded into the current save as a farmhand. The host options have been removed.", // TODO
 
     // general options
     "config.general-options": "일반 옵션",

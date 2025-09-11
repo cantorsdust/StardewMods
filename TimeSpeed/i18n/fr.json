@@ -5,7 +5,7 @@
     // changed manually
     "message.config-reloaded": "Le temps s'écoule désormais autrement...",
     "message.speed-changed": "10 minutes semblent se passer en {{seconds}} secondes.",
-    "message.time-stopped": "Le temps s'est arrêté...",
+    "message.time-stopped": "Time has stopped...", // TODO
     "message.time-resumed": "Le temps reprend son cours...",
 
     // changed based on time
@@ -20,8 +20,8 @@
     /*********
     ** Generic Mod Config Menu UI
     *********/
-    // global descriptions
-    "config.farmhand-info.desc": "Vous êtes chargé dans la sauvegarde actuelle en tant qu'ouvrier agricole. Les options d'hôte ont été supprimées.",
+    // warnings
+    "config.farmhand-info.desc": "You are loaded into the current save as a farmhand. The host options have been removed.", // TODO
 
     // general options
     "config.general-options": "Options générales",

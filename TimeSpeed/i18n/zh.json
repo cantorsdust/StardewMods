@@ -5,7 +5,7 @@
     // changed manually
     "message.config-reloaded": "时间流动变得不同了...",
     "message.speed-changed": "10分钟感觉就像 {{seconds}} 秒。",
-    "message.time-stopped": "时间停止了...",
+    "message.time-stopped": "Time has stopped...", // TODO
     "message.time-resumed": "时间像往常一样重新流动...",
 
     // changed based on time
@@ -20,8 +20,8 @@
     /*********
     ** Generic Mod Config Menu UI
     *********/
-    // global descriptions
-    "config.farmhand-info.desc": "您将作为农场工人加载到当前保存中。主机选项已被删除。",
+    // warnings
+    "config.farmhand-info.desc": "You are loaded into the current save as a farmhand. The host options have been removed.", // TODO
 
     // general options
     "config.general-options": "通常设置",

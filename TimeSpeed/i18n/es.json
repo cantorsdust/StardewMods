@@ -5,7 +5,7 @@
     // changed manually
     "message.config-reloaded": "El tiempo pasa diferente ahora...",
     "message.speed-changed": "10 minutos serán {{seconds}} segundos.",
-    "message.time-stopped": "El tiempo se ha detenido...",
+    "message.time-stopped": "Time has stopped...", // TODO
     "message.time-resumed": "El tiempo pasa como de costumbre ahora...",
 
     // changed based on time
@@ -20,8 +20,8 @@
     /*********
     ** Generic Mod Config Menu UI
     *********/
-    // global descriptions
-    "config.farmhand-info.desc": "Estás cargado en el guardado actual como peón. Se han eliminado las opciones de host.",
+    // warnings
+    "config.farmhand-info.desc": "You are loaded into the current save as a farmhand. The host options have been removed.", // TODO
 
     // general options
     "config.general-options": "Opciones generales",

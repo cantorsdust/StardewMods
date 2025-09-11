@@ -20,7 +20,7 @@
     /*********
     ** Generic Mod Config Menu UI
     *********/
-    // global descriptions
+    // warnings
     "config.farmhand-info.desc": "You are loaded into the current save as a farmhand. The host options have been removed.",
 
     // general options
@@ -61,14 +61,6 @@
     "config.freeze-time-freeze-names.desc": "The names of specific locations in which to freeze time. Location names can be seen in-game using the Debug Mode mod. You can list multiple with commas.",
     "config.freeze-time-dont-freeze-names.name": "Don't freeze location names",
     "config.freeze-time-dont-freeze-names.desc": "The names of specific locations in which time shouldn't be frozen, regardless of the previous settings. Location names can be seen in-game using the Debug Mode mod. You can list multiple with commas.",
-
-    // notifications
-    "config.notify-time-freeze.name": "Show time freezing from users",
-    "config.notify-time-freeze.desc": "Whether to show a message when a user freezes time.",
-    "config.notify-time-change.name": "Show time changes from user",
-    "config.notify-time-change.desc": "Whether to show a message when a user slows or speeds up time.",
-    "config.notify-location.name": "Show time info on warp",
-    "config.notify-location.desc": "Whether to show a message about the time settings when you enter a location.",
 
     // controls
     "config.controls": "Controls",

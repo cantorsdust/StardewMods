@@ -5,7 +5,7 @@
     // changed manually
     "message.config-reloaded": "時の流れが変わった…",
     "message.speed-changed": "10分が{{seconds}}秒に感じます。",
-    "message.time-stopped": "おい、時間を止めたな！",
+    "message.time-stopped": "Time has stopped...", // TODO
     "message.time-resumed": "今はいつも通りの時間が流れている…",
 
     // changed based on time
@@ -20,6 +20,9 @@
     /*********
     ** Generic Mod Config Menu UI
     *********/
+    // warnings
+    "config.farmhand-info.desc": "You are loaded into the current save as a farmhand. The host options have been removed.", // TODO
+
     // general options
     "config.general-options": "一般設定",
     "config.enable-on-festival-days.name": "お祭りの開催日でも有効にする",
