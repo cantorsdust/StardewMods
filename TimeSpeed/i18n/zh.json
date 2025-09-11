@@ -5,7 +5,7 @@
     // changed manually
     "message.config-reloaded": "时间流逝变得不同了...",
     "message.speed-changed": "10分钟感觉就像{{seconds}}秒。",
-    "message.time-stopped": "嘿，你冻结了时间!",
+    "message.time-stopped": "Time has stopped...", // TODO
     "message.time-resumed": "时间像往常一样重新流逝...",
 
     // changed based on time
@@ -16,10 +16,18 @@
     "message.on-location-change.time-stopped-here": "在这里时间似乎停止了...",
     "message.on-location-change.time-speed-here": "在这里10分钟感觉就像{{seconds}}秒钟...",
 
+    // multiplayer messages
+    // TODO
+    "message.host-missing-mod": "You can't change time because the main player doesn't have TimeSpeed installed.",
+    "message.host-access-denied": "You can't change time because the main player doesn't allow that.",
+
 
     /*********
     ** Generic Mod Config Menu UI
     *********/
+    // warnings
+    "config.farmhand-warning": "The host player's options apply for this save. You can still edit the options below, but only the controls will do anything as a farmhand.", // TODO
+
     // general options
     "config.general-options": "常规设置",
     "config.enable-on-festival-days.name": "在节日时启用",
@@ -60,6 +68,12 @@
     "config.freeze-time-freeze-names.desc": "自定义添加冻结时间的地点，可以添加多个，用逗号隔开。下载尾号679的mod在游戏内查看地点名称。",
     "config.freeze-time-dont-freeze-names.name": "自定义不冻结地点",
     "config.freeze-time-dont-freeze-names.desc": "自定义添加不冻结时间的地点，可以添加多个，用逗号隔开。下载尾号679的mod在游戏内查看地点名称。",
+
+    // multiplayer options
+    // TODO
+    "config.multiplayer": "Multiplayer",
+    "config.let-farmhands-manage-time.name": "Let farmhands manage time",
+    "config.let-farmhands-manage-time.description": "When you're hosting a save in multiplayer mode, whether other players can freeze or change the time speed if they have the mod installed too.",
 
     // controls
     "config.controls": "按键绑定",

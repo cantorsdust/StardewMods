@@ -23,6 +23,9 @@ internal class ModConfig
     /// <summary>The mod configuration for where time should be frozen.</summary>
     public ModFreezeTimeConfig FreezeTime { get; set; } = new();
 
+    /// <summary>When hosting a save in multiplayer, whether other players can manage the time too.</summary>
+    public bool LetFarmhandsManageTime { get; set; } = true;
+
     /// <summary>The keyboard bindings used to control the flow of time. See available keys at <a href="https://msdn.microsoft.com/en-us/library/microsoft.xna.framework.input.keys.aspx" />.</summary>
     public ModControlsConfig Keys { get; set; } = new();
 

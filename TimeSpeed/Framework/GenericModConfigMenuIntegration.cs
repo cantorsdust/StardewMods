@@ -27,7 +27,12 @@ internal static class GenericModConfigMenuIntegration
             return;
 
         // register config UI
+        api.Unregister(manifest);
         api.Register(manifest, reset, save);
+
+        // add warning if not host player
+        if (!Context.IsMainPlayer)
+            api.AddParagraph(manifest, I18n.Config_FarmhandWarning);
 
         // general options
         const float minSecondsPerMinute = 0.1f;
@@ -188,6 +193,16 @@ internal static class GenericModConfigMenuIntegration
                     .Select(p => p.Trim())
                     .Where(p => p != string.Empty)
             )
+        );
+
+        // multiplayer
+        api.AddSectionTitle(manifest, I18n.Config_Multiplayer);
+        api.AddBoolOption(
+            manifest,
+            name: I18n.Config_LetFarmhandsManageTime_Name,
+            tooltip: I18n.Config_LetFarmhandsManageTime_Description,
+            getValue: () => getConfig().LetFarmhandsManageTime,
+            setValue: value => getConfig().LetFarmhandsManageTime = value
         );
 
         // controls

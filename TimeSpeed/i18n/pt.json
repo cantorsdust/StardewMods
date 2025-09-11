@@ -5,7 +5,7 @@
     // changed manually
     "message.config-reloaded": "O tempo parece diferente agora...",
     "message.speed-changed": "10 minutos parecem como {{seconds}} segundos.",
-    "message.time-stopped": "Aí, você parou o tempo!",
+    "message.time-stopped": "Time has stopped...", // TODO
     "message.time-resumed": "O tempo parece normal agora...",
 
     // changed based on time
@@ -16,10 +16,18 @@
     "message.on-location-change.time-stopped-here": "Parece que o tempo está congelado aqui...",
     "message.on-location-change.time-speed-here": "10 minutos parecem mais como {{seconds}} segundos aqui...",
 
+    // multiplayer messages
+    // TODO
+    "message.host-missing-mod": "You can't change time because the main player doesn't have TimeSpeed installed.",
+    "message.host-access-denied": "You can't change time because the main player doesn't allow that.",
+
 
     /*********
     ** Generic Mod Config Menu UI
     *********/
+    // warnings
+    "config.farmhand-warning": "The host player's options apply for this save. You can still edit the options below, but only the controls will do anything as a farmhand.", // TODO
+
     // general options
     "config.general-options": "Opções Gerais",
     "config.enable-on-festival-days.name": "Ativar em dias de festival",
@@ -60,6 +68,12 @@
     "config.freeze-time-freeze-names.desc": "Os nomes de locais específicos onde congelar o tempo. Os nomes dos locais podem ser vistos no jogo usando o mod Debug Mode. Você pode listar vários com vírgulas.",
     "config.freeze-time-dont-freeze-names.name": "Nomes de locais não congelados",
     "config.freeze-time-dont-freeze-names.desc": "Os nomes de locais específicos onde o tempo não deve ser congelado, independentemente das configurações anteriores. Os nomes dos locais podem ser vistos no jogo usando o mod Debug Mode. Você pode listar vários com vírgulas.",
+
+    // multiplayer options
+    // TODO
+    "config.multiplayer": "Multiplayer",
+    "config.let-farmhands-manage-time.name": "Let farmhands manage time",
+    "config.let-farmhands-manage-time.description": "When you're hosting a save in multiplayer mode, whether other players can freeze or change the time speed if they have the mod installed too.",
 
     // controls
     "config.controls": "Controles",
