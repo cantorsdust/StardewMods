@@ -1,9 +1,12 @@
 ﻿﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.9.0
+Released 11 September 2025 for SMAPI 4.1.10 or later. Updated by Pathoschild.
+
 * You can now set an optional limit per legendary fish [in the options](README.md#Configure) (once per day, week, season, or year).
 * Improved translations. Thanks to SummerFleur2997 (updated Chinese)!
+* Internal changes to simplify maintenance.
 
 ## 1.8.9
 Released 12 January 2025 for SMAPI 4.1.10 or later. Updated by Pathoschild.
