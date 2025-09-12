@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using cantorsdust.Common.Integrations;
 using StardewModdingAPI;
+using StardewValley;
 
 namespace TimeSpeed.Framework;
 
@@ -21,12 +22,17 @@ internal static class GenericModConfigMenuIntegration
     public static void Register(IManifest manifest, IModRegistry modRegistry, IMonitor monitor, Func<ModConfig> getConfig, Action reset, Action save)
     {
         // get API
-        IGenericModConfigMenuApi api = IntegrationHelper.GetGenericModConfigMenu(modRegistry, monitor);
+        IGenericModConfigMenuApi? api = IntegrationHelper.GetGenericModConfigMenu(modRegistry, monitor);
         if (api == null)
             return;
 
         // register config UI
+        api.Unregister(manifest);
         api.Register(manifest, reset, save);
+
+        // add warning if not host player
+        if (!Context.IsMainPlayer)
+            api.AddParagraph(manifest, I18n.Config_FarmhandWarning);
 
         // general options
         const float minSecondsPerMinute = 0.1f;
@@ -102,14 +108,32 @@ internal static class GenericModConfigMenuIntegration
 
         // freeze time
         api.AddSectionTitle(manifest, I18n.Config_FreezeTime);
-        api.AddNumberOption(
+        {
+            static int ToValue(int time) => Utility.ConvertTimeToMinutes(time);
+            static int FromValue(int value) => Utility.ConvertMinutesToTime(value);
+
+            api.AddNumberOption(
+                manifest,
+                name: I18n.Config_AnywhereAtTime_Name,
+                tooltip: I18n.Config_AnywhereAtTime_Desc,
+                getValue: () => ToValue(getConfig().FreezeTime.AnywhereAtTime ?? 2600),
+                setValue: value =>
+                {
+                    int newTime = FromValue(value);
+                    getConfig().FreezeTime.AnywhereAtTime = newTime == 2600 ? null : newTime;
+                },
+                min: ToValue(600),
+                max: ToValue(2600),
+                interval: ToValue(10),
+                formatValue: value => Game1.getTimeOfDayString(FromValue(value))
+            );
+        }
+        api.AddBoolOption(
             manifest,
-            name: I18n.Config_AnywhereAtTime_Name,
-            tooltip: I18n.Config_AnywhereAtTime_Desc,
-            getValue: () => getConfig().FreezeTime.AnywhereAtTime ?? 2600,
-            setValue: value => getConfig().FreezeTime.AnywhereAtTime = (value == 2600 ? null : value),
-            min: 600,
-            max: 2600
+            name: I18n.Config_FreezeBeforePassingOut_Name,
+            tooltip: () => I18n.Config_FreezeBeforePassingOut_Desc(freezeTimeAt: I18n.Config_AnywhereAtTime_Name()),
+            getValue: () => getConfig().FreezeTime.PassOut,
+            setValue: value => getConfig().FreezeTime.PassOut = value
         );
         api.AddBoolOption(
             manifest,
@@ -169,6 +193,16 @@ internal static class GenericModConfigMenuIntegration
                     .Select(p => p.Trim())
                     .Where(p => p != string.Empty)
             )
+        );
+
+        // multiplayer
+        api.AddSectionTitle(manifest, I18n.Config_Multiplayer);
+        api.AddBoolOption(
+            manifest,
+            name: I18n.Config_LetFarmhandsManageTime_Name,
+            tooltip: I18n.Config_LetFarmhandsManageTime_Description,
+            getValue: () => getConfig().LetFarmhandsManageTime,
+            setValue: value => getConfig().LetFarmhandsManageTime = value
         );
 
         // controls

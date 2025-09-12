@@ -18,30 +18,14 @@ Just install the mod and play the game. Any saplings or planted tree seeds that 
 will grow instantly overnight.
 
 ## Configure
-### In-game settings
-If you have [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098) installed,
-you can click the cog button (⚙) on the title screen or the "mod options" button at the bottom of
-the in-game menu to configure the mod. Hover the cursor over a field for details, or see the next
-section.
+If you install [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098), you
+can click the cog button (⚙) on the title screen or the "mod options" button at the bottom of the
+in-game menu to configure the mod. Hover the cursor over a field for details.
 
 ![](screenshots/generic-config-menu.png)
 
-### `config.json` file
-The mod creates a `config.json` file the first time you run it. You can open the file in a text
-editor to configure the mod:
-
-group           | setting                    | effect
-:-------------- | :------------------------- | :-----
-`FruitTrees`    | `InstantlyAge`             | Whether fruit trees age instantly to iridium quality overnight. Default `false`.
-&nbsp;          | `InstantlyGrow`            | Whether fruit trees grow instantly overnight. Default `true`.
-&nbsp;          | `InstantlyGrowInWinter`    | Whether fruit trees also grow instantly in winter. Default `true`.
-&nbsp;          | `InstantlyGrowWhenInvalid` | Whether fruit trees also grow instantly even if they normally wouldn't grow (e.g. too close to another tree). Default `false`.
-`NonFruitTrees` | `InstantlyGrow`            | Whether non-fruit trees grow instantly overnight. Default `true`.
-&nbsp;          | `InstantlyGrowInWinter`    | Whether non-fruit trees also grow instantly in winter. Default `true`.
-&nbsp;          | `InstantlyGrowWhenInvalid` | Whether non-fruit trees also grow instantly even if they normally wouldn't grow (e.g. too close to another tree). Default `false`.
-
 ## Compatibility
-* Works with Stardew Valley 1.6+ on Linux/macOS/Windows.
+* Works with Stardew Valley 1.6.15+ on Linux/macOS/Windows.
 * Works in single-player, multiplayer, and split-screen mode.
 * No known mod conflicts.
 

@@ -1,10 +1,12 @@
 using System;
+using System.Collections.Generic;
 using cantorsdust.Common;
 using Microsoft.Xna.Framework.Input;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
 using TimeSpeed.Framework;
+using TimeSpeed.Framework.Messages;
 
 namespace TimeSpeed;
 
@@ -14,25 +16,28 @@ internal class ModEntry : Mod
     /*********
     ** Properties
     *********/
-    /// <summary>Displays messages to the user.</summary>
-    private readonly Notifier Notifier = new();
-
     /// <summary>Provides helper methods for tracking time flow.</summary>
     private readonly TimeHelper TimeHelper = new();
 
-    /// <summary>The mod configuration.</summary>
-    private ModConfig Config;
+    /// <summary>Displays messages to the user.</summary>
+    private Notifier Notifier = null!; // set in Entry
 
-    /// <summary>Whether the player has manually frozen (<c>true</c>) or resumed (<c>false</c>) time.</summary>
-    private bool? ManualFreeze;
+    /// <summary>The mod configuration.</summary>
+    private ModConfig Config = null!; // set in Entry
+
+    /// <summary>Whether the player has manually frozen time.</summary>
+    private bool ManualFreeze;
 
     /// <summary>The reason time would be frozen automatically if applicable, regardless of <see cref="ManualFreeze"/>.</summary>
     private AutoFreezeReason AutoFreeze = AutoFreezeReason.None;
 
+    /// <summary>The current auto-freeze reasons which the player has temporarily suspended until the relevant context changes.</summary>
+    private readonly HashSet<AutoFreezeReason> SuspendAutoFreezes = [];
+
     /// <summary>Whether time should be frozen.</summary>
     private bool IsTimeFrozen =>
-        this.ManualFreeze == true
-        || (this.AutoFreeze != AutoFreezeReason.None && this.ManualFreeze != false);
+        this.ManualFreeze
+        || (this.AutoFreeze != AutoFreezeReason.None && !this.SuspendAutoFreezes.Contains(this.AutoFreeze));
 
     /// <summary>Whether the flow of time should be adjusted.</summary>
     private bool AdjustTime;
@@ -54,8 +59,10 @@ internal class ModEntry : Mod
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
+        // init
         I18n.Init(helper.Translation);
         CommonHelper.RemoveObsoleteFiles(this, "TimeSpeed.pdb");
+        this.Notifier = new Notifier(this.Helper.Multiplayer, this.ModManifest.UniqueID, this.Monitor);
 
         // read config
         this.Config = helper.ReadConfig<ModConfig>();
@@ -68,6 +75,7 @@ internal class ModEntry : Mod
         helper.Events.GameLoop.TimeChanged += this.OnTimeChanged;
         helper.Events.GameLoop.DayStarted += this.OnDayStarted;
         helper.Events.Input.ButtonsChanged += this.OnButtonsChanged;
+        helper.Events.Multiplayer.ModMessageReceived += this.OnModMessageReceived;
         helper.Events.Player.Warped += this.OnWarped;
 
         // add time freeze/unfreeze notification
@@ -95,35 +103,78 @@ internal class ModEntry : Mod
     ** Event handlers
     ****/
     /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
-    /// <param name="sender">The event sender.</param>
-    /// <param name="e">The event arguments.</param>
-    private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
+    private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
-        GenericModConfigMenuIntegration.Register(this.ModManifest, this.Helper.ModRegistry, this.Monitor,
-            getConfig: () => this.Config,
-            reset: () => this.Config = new(),
-            save: () =>
-            {
-                this.Helper.WriteConfig(this.Config);
-                if (Context.IsWorldReady && this.ShouldEnable())
-                    this.UpdateSettingsForLocation(Game1.currentLocation);
-            }
-        );
+        this.RegisterConfigMenu();
     }
 
     /// <inheritdoc cref="IGameLoopEvents.SaveLoaded"/>
-    /// <param name="sender">The event sender.</param>
-    /// <param name="e">The event arguments.</param>
-    private void OnSaveLoaded(object sender, SaveLoadedEventArgs e)
+    private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
     {
-        if (!Context.IsMainPlayer)
-            this.Monitor.Log("Disabled mod; only works for the main player in multiplayer.", LogLevel.Warn);
+        this.RegisterConfigMenu();
+    }
+
+    /// <inheritdoc cref="IMultiplayerEvents.ModMessageReceived"/>
+    private void OnModMessageReceived(object? sender, ModMessageReceivedEventArgs e)
+    {
+        if (e.FromModID != this.ModManifest.UniqueID || e.FromPlayerID == Game1.player.UniqueMultiplayerID)
+            return;
+
+        switch (e.Type)
+        {
+            // from farmhand: request to (un)freeze time
+            case nameof(ToggleFreezeMessage):
+                if (Context.IsMainPlayer)
+                {
+                    if (!this.Config.LetFarmhandsManageTime)
+                        this.RejectRequestFromFarmhand("toggle time freeze", e.FromPlayerID);
+                    else
+                        this.ToggleFreeze(fromPlayerId: e.FromPlayerID);
+                }
+
+                break;
+
+            // from farmhand: request to change time speed
+            case nameof(ChangeTickIntervalMessage):
+                if (Context.IsMainPlayer)
+                {
+                    if (!this.Config.LetFarmhandsManageTime)
+                        this.RejectRequestFromFarmhand("change time speed", e.FromPlayerID);
+                    else
+                    {
+                        var message = e.ReadAs<ChangeTickIntervalMessage>();
+                        this.ChangeTickInterval(message.Increase, message.Change, fromPlayerId: e.FromPlayerID);
+                    }
+                }
+                break;
+
+            // from host: access denied
+            case nameof(RequestDeniedMessage):
+                this.Notifier.OnAccessDeniedFromHost(I18n.Message_HostAccessDenied());
+                break;
+
+            // from host: time speed changed
+            case nameof(NotifyTickIntervalChangedMessage):
+                if (!Context.IsMainPlayer)
+                {
+                    var message = e.ReadAs<NotifyTickIntervalChangedMessage>();
+                    this.Notifier.OnSpeedChanged(message.NewInterval, fromPlayerId: message.FromPlayerId);
+                }
+                break;
+
+            // from host: time (un)frozen
+            case nameof(NotifyFreezeChangedMessage):
+                if (!Context.IsMainPlayer)
+                {
+                    var message = e.ReadAs<NotifyFreezeChangedMessage>();
+                    this.Notifier.OnTimeFreezeToggled(frozen: message.IsFrozen, fromPlayerId: message.FromPlayerId);
+                }
+                break;
+        }
     }
 
     /// <inheritdoc cref="IGameLoopEvents.DayStarted"/>
-    /// <param name="sender">The event sender.</param>
-    /// <param name="e">The event arguments.</param>
-    private void OnDayStarted(object sender, DayStartedEventArgs e)
+    private void OnDayStarted(object? sender, DayStartedEventArgs e)
     {
         if (!this.ShouldEnable())
             return;
@@ -134,9 +185,7 @@ internal class ModEntry : Mod
     }
 
     /// <inheritdoc cref="IInputEvents.ButtonsChanged"/>
-    /// <param name="sender">The event sender.</param>
-    /// <param name="e">The event arguments.</param>
-    private void OnButtonsChanged(object sender, ButtonsChangedEventArgs e)
+    private void OnButtonsChanged(object? sender, ButtonsChangedEventArgs e)
     {
         if (!this.ShouldEnable(forInput: true))
             return;
@@ -152,9 +201,7 @@ internal class ModEntry : Mod
     }
 
     /// <inheritdoc cref="IPlayerEvents.Warped"/>
-    /// <param name="sender">The event sender.</param>
-    /// <param name="e">The event arguments.</param>
-    private void OnWarped(object sender, WarpedEventArgs e)
+    private void OnWarped(object? sender, WarpedEventArgs e)
     {
         if (!this.ShouldEnable() || !e.IsLocalPlayer)
             return;
@@ -163,9 +210,7 @@ internal class ModEntry : Mod
     }
 
     /// <inheritdoc cref="IGameLoopEvents.TimeChanged"/>
-    /// <param name="sender">The event sender.</param>
-    /// <param name="e">The event arguments.</param>
-    private void OnTimeChanged(object sender, TimeChangedEventArgs e)
+    private void OnTimeChanged(object? sender, TimeChangedEventArgs e)
     {
         if (!this.ShouldEnable())
             return;
@@ -174,9 +219,7 @@ internal class ModEntry : Mod
     }
 
     /// <inheritdoc cref="IGameLoopEvents.UpdateTicked"/>
-    /// <param name="sender">The event sender.</param>
-    /// <param name="e">The event arguments.</param>
-    private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
+    private void OnUpdateTicked(object? sender, UpdateTickedEventArgs e)
     {
         if (!this.ShouldEnable())
             return;
@@ -185,10 +228,10 @@ internal class ModEntry : Mod
 
         if (e.IsOneSecond && this.Monitor.IsVerbose)
         {
-            string timeFrozenLabel;
-            if (this.ManualFreeze is true)
+            string? timeFrozenLabel;
+            if (this.ManualFreeze)
                 timeFrozenLabel = ", frozen manually";
-            else if (this.ManualFreeze is false)
+            else if (this.SuspendAutoFreezes.Contains(this.AutoFreeze))
                 timeFrozenLabel = ", resumed manually";
             else if (this.IsTimeFrozen)
                 timeFrozenLabel = $", frozen per {this.AutoFreeze}";
@@ -199,10 +242,8 @@ internal class ModEntry : Mod
         }
     }
 
-    /// <summary>Raised after the <see cref="Framework.TimeHelper.TickProgress"/> value changes.</summary>
-    /// <param name="sender">The event sender.</param>
-    /// <param name="e">The event arguments.</param>
-    private void OnTickProgressed(object sender, TickProgressChangedEventArgs e)
+    /// <summary>Raised after the <see cref="TimeHelper.TickProgress"/> value changes.</summary>
+    private void OnTickProgressed(object? sender, TickProgressChangedEventArgs e)
     {
         if (!this.ShouldEnable())
             return;
@@ -230,8 +271,12 @@ internal class ModEntry : Mod
     /// <param name="forInput">Whether to check for input handling.</param>
     private bool ShouldEnable(bool forInput = false)
     {
-        // is loaded and host player (farmhands can't change time)
-        if (!Context.IsWorldReady || !Context.IsMainPlayer)
+        // save is loaded
+        if (!Context.IsWorldReady)
+            return false;
+
+        // must be host player to directly control time
+        if (!Context.IsMainPlayer && !forInput)
             return false;
 
         // check restrictions for input
@@ -255,15 +300,33 @@ internal class ModEntry : Mod
         this.Config = this.Helper.ReadConfig<ModConfig>();
         this.UpdateScaleForDay(Game1.season, Game1.dayOfMonth);
         this.UpdateSettingsForLocation(Game1.currentLocation);
-        this.Notifier.ShortNotify(I18n.Message_ConfigReloaded());
+        this.Notifier.OnConfigReloaded();
+    }
+
+    /// <summary>Register or update the config menu with Generic Mod Config Menu.</summary>
+    private void RegisterConfigMenu()
+    {
+        GenericModConfigMenuIntegration.Register(this.ModManifest, this.Helper.ModRegistry, this.Monitor,
+            getConfig: () => this.Config,
+            reset: () => this.Config = new ModConfig(),
+            save: () =>
+            {
+                this.Helper.WriteConfig(this.Config);
+                if (this.ShouldEnable())
+                    this.UpdateSettingsForLocation(Game1.currentLocation);
+            }
+        );
     }
 
     /// <summary>Increment or decrement the tick interval, taking into account the held modifier key if applicable.</summary>
     /// <param name="increase">Whether to increment the tick interval; else decrement.</param>
-    private void ChangeTickInterval(bool increase)
+    /// <param name="amount">The absolute amount by which to change the tick interval, or <c>null</c> to get the default amount based on the local pressed keys.</param>
+    /// <param name="fromPlayerId">The player which requested the change, if applicable.</param>
+    private void ChangeTickInterval(bool increase, int? amount = null, long? fromPlayerId = null)
     {
         // get offset to apply
-        int change = 1000;
+        int change = amount ?? 1000;
+        if (!amount.HasValue)
         {
             KeyboardState state = Keyboard.GetState();
             if (state.IsKeyDown(Keys.LeftControl))
@@ -274,6 +337,13 @@ internal class ModEntry : Mod
                 change /= 10;
         }
 
+        // ask host to change the tick interval if needed
+        if (!Context.IsMainPlayer)
+        {
+            this.SendMessageToHost(new ChangeTickIntervalMessage { Change = change, Increase = increase });
+            return;
+        }
+
         // update tick interval
         if (!increase)
         {
@@ -281,30 +351,27 @@ internal class ModEntry : Mod
             this.TickInterval = Math.Max(minAllowed, this.TickInterval - change);
         }
         else
-            this.TickInterval = this.TickInterval + change;
+            this.TickInterval += change;
 
         // log change
-        this.Notifier.QuickNotify(
-            I18n.Message_SpeedChanged(seconds: this.TickInterval / 1000)
-        );
-        this.Monitor.Log($"Tick length set to {this.TickInterval / 1000d:0.##} seconds.", LogLevel.Info);
+        this.Notifier.OnSpeedChanged(this.TickInterval, fromPlayerId);
     }
 
     /// <summary>Toggle whether time is frozen.</summary>
-    private void ToggleFreeze()
+    /// <param name="fromPlayerId">The player which requested the change, if applicable.</param>
+    private void ToggleFreeze(long? fromPlayerId = null)
     {
-        if (!this.IsTimeFrozen)
+        // ask host to toggle freeze if needed
+        if (!Context.IsMainPlayer)
         {
-            this.UpdateTimeFreeze(manualOverride: true);
-            this.Notifier.QuickNotify(I18n.Message_TimeStopped());
-            this.Monitor.Log("Time is frozen globally.", LogLevel.Info);
+            this.SendMessageToHost(new ToggleFreezeMessage());
+            return;
         }
-        else
-        {
-            this.UpdateTimeFreeze(manualOverride: false);
-            this.Notifier.QuickNotify(I18n.Message_TimeResumed());
-            this.Monitor.Log($"Time is resumed at \"{Game1.currentLocation.Name}\".", LogLevel.Info);
-        }
+
+        // apply
+        bool freeze = !this.IsTimeFrozen;
+        this.UpdateTimeFreeze(manualOverride: freeze);
+        this.Notifier.OnTimeFreezeToggled(frozen: freeze, fromPlayerId: fromPlayerId);
     }
 
     /// <summary>Update the time freeze settings for the given time of day.</summary>
@@ -314,41 +381,24 @@ internal class ModEntry : Mod
         this.UpdateTimeFreeze();
 
         if (!wasFrozen && this.IsTimeFrozen)
-        {
-            this.Notifier.ShortNotify(I18n.Message_OnTimeChange_TimeStopped());
-            this.Monitor.Log($"Time automatically set to frozen at {Game1.timeOfDay}.", LogLevel.Info);
-        }
+            this.Notifier.OnTimeFreezeToggled(frozen: true, logMessage: $"Time automatically set to frozen at {Game1.timeOfDay}.");
     }
 
     /// <summary>Update the time settings for the given location.</summary>
     /// <param name="location">The game location.</param>
-    private void UpdateSettingsForLocation(GameLocation location)
+    private void UpdateSettingsForLocation(GameLocation? location)
     {
         if (location == null)
             return;
 
         // update time settings
+        this.SuspendAutoFreezes.Remove(AutoFreezeReason.FrozenForLocation);
         this.UpdateTimeFreeze();
         this.TickInterval = this.Config.GetMillisecondsPerMinute(location) * 10;
 
         // notify player
         if (this.Config.LocationNotify)
-        {
-            switch (this.AutoFreeze)
-            {
-                case AutoFreezeReason.FrozenAtTime when this.IsTimeFrozen:
-                    this.Notifier.ShortNotify(I18n.Message_OnLocationChange_TimeStoppedGlobally());
-                    break;
-
-                case AutoFreezeReason.FrozenForLocation when this.IsTimeFrozen:
-                    this.Notifier.ShortNotify(I18n.Message_OnLocationChange_TimeStoppedHere());
-                    break;
-
-                default:
-                    this.Notifier.ShortNotify(I18n.Message_OnLocationChange_TimeSpeedHere(seconds: this.TickInterval / 1000));
-                    break;
-            }
-        }
+            this.Notifier.OnLocalLocationChanged(this.IsTimeFrozen, this.TickInterval, this.AutoFreeze);
     }
 
     /// <summary>Update the <see cref="AutoFreeze"/> and <see cref="ManualFreeze"/> flags based on the current context.</summary>
@@ -356,27 +406,28 @@ internal class ModEntry : Mod
     /// <param name="clearPreviousOverrides">Whether to clear any previous explicit overrides.</param>
     private void UpdateTimeFreeze(bool? manualOverride = null, bool clearPreviousOverrides = false)
     {
-        bool? wasManualFreeze = this.ManualFreeze;
+        bool wasManualFreeze = this.ManualFreeze;
         AutoFreezeReason wasAutoFreeze = this.AutoFreeze;
 
         // update auto freeze
         this.AutoFreeze = this.GetAutoFreezeType();
+        bool isAutoFrozen = this.AutoFreeze != AutoFreezeReason.None;
 
         // update manual freeze
         if (manualOverride.HasValue)
             this.ManualFreeze = manualOverride.Value;
-        else if (clearPreviousOverrides)
-            this.ManualFreeze = null;
 
-        // clear manual unfreeze if it's no longer needed
-        if (this.ManualFreeze == false && this.AutoFreeze == AutoFreezeReason.None)
-            this.ManualFreeze = null;
+        // update overrides
+        if (clearPreviousOverrides || !isAutoFrozen)
+            this.SuspendAutoFreezes.Clear();
+        if (manualOverride == false && isAutoFrozen)
+            this.SuspendAutoFreezes.Add(this.AutoFreeze);
 
         // log change
         if (wasAutoFreeze != this.AutoFreeze)
             this.Monitor.Log($"Auto freeze changed from {wasAutoFreeze} to {this.AutoFreeze}.");
         if (wasManualFreeze != this.ManualFreeze)
-            this.Monitor.Log($"Manual freeze changed from {wasManualFreeze?.ToString() ?? "null"} to {this.ManualFreeze?.ToString() ?? "null"}.");
+            this.Monitor.Log($"Manual freeze changed from {wasManualFreeze} to {this.ManualFreeze}.");
     }
 
     /// <summary>Update the time settings for the given date.</summary>
@@ -402,9 +453,44 @@ internal class ModEntry : Mod
         if (this.Config.ShouldFreeze(Game1.currentLocation))
             return AutoFreezeReason.FrozenForLocation;
 
+        if (this.Config.ShouldFreezeBeforePassingOut(Game1.timeOfDay))
+            return AutoFreezeReason.FrozenBeforePassOut;
+
         if (this.Config.ShouldFreeze(Game1.timeOfDay))
             return AutoFreezeReason.FrozenAtTime;
 
         return AutoFreezeReason.None;
+    }
+
+    /// <summary>Send a multiplayer message to the host player.</summary>
+    /// <typeparam name="TMessage">The message type to send.</typeparam>
+    /// <param name="message">The message to send.</param>
+    private void SendMessageToHost<TMessage>(TMessage message)
+        where TMessage : notnull
+    {
+        // check host info
+        long hostPlayerId = Game1.MasterPlayer.UniqueMultiplayerID;
+        IMultiplayerPeerMod? hostMod = this.Helper.Multiplayer.GetConnectedPlayer(hostPlayerId)?.GetMod(this.ModManifest.UniqueID);
+        if (hostMod is null || hostMod.Version.IsOlderThan("2.8.0"))
+        {
+            this.Notifier.OnAccessDeniedFromHost(I18n.Message_HostMissingMod());
+            return;
+        }
+
+        // send message
+        string messageType = message.GetType().Name;
+        this.Helper.Multiplayer.SendMessage(message, messageType, modIDs: [this.ModManifest.UniqueID], playerIDs: [hostPlayerId]);
+    }
+
+    /// <summary>Reject a request to control the time from a farmhand.</summary>
+    /// <param name="actionLabel">A human-readable label for the attempted change (like 'toggle time freeze') for logged messages.</param>
+    /// <param name="farmhandId">The farmhand who requested the change.</param>
+    private void RejectRequestFromFarmhand(string actionLabel, long farmhandId)
+    {
+        string farmhandName = Game1.GetPlayer(farmhandId)?.Name ?? farmhandId.ToString();
+
+        this.Monitor.Log($"Rejected request from {farmhandName} to {actionLabel}, because you disabled that in the mod options.", LogLevel.Info);
+
+        this.Helper.Multiplayer.SendMessage(new RequestDeniedMessage(), nameof(RequestDeniedMessage), modIDs: [this.ModManifest.UniqueID], playerIDs: [farmhandId]);
     }
 }

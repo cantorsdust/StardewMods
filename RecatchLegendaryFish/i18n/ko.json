@@ -9,6 +9,18 @@
     /*********
     ** Generic Mod Config Menu UI
     *********/
+    // options section
+    // TODO
+    "config.options": "Options",
+    "config.catch-limit.name": "Catch limit per fish",
+    "config.catch-limit.desc": "How often you can catch each legendary fish.",
+    "config.catch-limit.Unlimited": "Unlimited",
+    "config.catch-limit.OnePerDay": "One of each per day",
+    "config.catch-limit.OnePerWeek": "One of each per week",
+    "config.catch-limit.OnePerSeason": "One of each per season",
+    "config.catch-limit.OnePerYear": "One of each per year",
+
+    // controls section
     "config.controls": "컨트롤",
     "config.toggle-key.name": "활성화 키",
     "config.toggle-key.desc": "전설적인 물고기를 다시 잡을 수 있는지 여부를 토글하는 키바인드."

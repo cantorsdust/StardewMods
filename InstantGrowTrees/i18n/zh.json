@@ -1,0 +1,24 @@
+﻿{
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    // fruit trees section
+    "config.fruit-trees": "果树",
+    "config.fruit-trees.instantly-age.name": "立即成长为最高品质",
+    "config.fruit-trees.instantly-age.desc": "是否使果树立即成长为铱星品质。",
+    "config.fruit-trees.instantly-grow.name": "立即生长",
+    "config.fruit-trees.instantly-grow.desc": "是否使得果树苗在次日生长成熟。",
+    "config.fruit-trees.instantly-grow-in-winter.name": "在冬季生效",
+    "config.fruit-trees.instantly-grow-in-winter.desc": "在冬季时，是否使得果树苗也能在次日生长成熟。（仅当“立即生长”启用时生效）",
+    "config.fruit-trees.instantly-grow-when-invalid.name": "在生长受阻时生效",
+    "config.fruit-trees.instantly-grow-when-invalid.desc": "当果树苗无法正常生长时，是否使得果树苗也能在次日生长成熟。（例如果树苗周围有其他的树时）",
+
+    // non-fruit trees section
+    "config.trees": "非果树",
+    "config.trees.instantly-grow.name": "立即生长",
+    "config.trees.instantly-grow.desc": "是否使得树苗在次日生长成熟。.",
+    "config.trees.instantly-grow-in-winter.name": "在冬季生效",
+    "config.trees.instantly-grow-in-winter.desc": "在冬季时，是否使得树苗也能在次日生长成熟。（仅当“立即生长”启用时生效）",
+    "config.trees.instantly-grow-when-invalid.name": "在生长受阻时生效",
+    "config.trees.instantly-grow-when-invalid.desc": "当树苗无法正常生长时，是否使得树苗也能在次日生长成熟。（例如树苗周围有其他的树时）"
+}

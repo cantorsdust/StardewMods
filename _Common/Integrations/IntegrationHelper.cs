@@ -15,11 +15,11 @@ internal static class IntegrationHelper
     /// <param name="modRegistry">An API for fetching metadata about loaded mods.</param>
     /// <param name="monitor">Encapsulates monitoring and logging.</param>
     /// <returns>Returns the mod's API interface if valid, else null.</returns>
-    public static TInterface GetValidatedApi<TInterface>(string label, string modId, string minVersion, IModRegistry modRegistry, IMonitor monitor)
+    public static TInterface? GetValidatedApi<TInterface>(string label, string modId, string minVersion, IModRegistry modRegistry, IMonitor monitor)
         where TInterface : class
     {
         // check mod installed
-        IManifest mod = modRegistry.Get(modId)?.Manifest;
+        IManifest? mod = modRegistry.Get(modId)?.Manifest;
         if (mod == null)
             return null;
 
@@ -45,7 +45,7 @@ internal static class IntegrationHelper
     /// <param name="modRegistry">An API for fetching metadata about loaded mods.</param>
     /// <param name="monitor">Encapsulates monitoring and logging.</param>
     /// <returns>Returns the API interface if valid, else null.</returns>
-    public static IGenericModConfigMenuApi GetGenericModConfigMenu(IModRegistry modRegistry, IMonitor monitor)
+    public static IGenericModConfigMenuApi? GetGenericModConfigMenu(IModRegistry modRegistry, IMonitor monitor)
     {
         return IntegrationHelper.GetValidatedApi<IGenericModConfigMenuApi>(
             label: "Generic Mod Config Menu",

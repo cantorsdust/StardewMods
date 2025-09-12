@@ -1,4 +1,6 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
+using cantorsdust.Common;
 using StardewValley;
 
 namespace TimeSpeed.Framework;
@@ -21,6 +23,9 @@ internal class ModConfig
     /// <summary>The mod configuration for where time should be frozen.</summary>
     public ModFreezeTimeConfig FreezeTime { get; set; } = new();
 
+    /// <summary>When hosting a save in multiplayer, whether other players can manage the time too.</summary>
+    public bool LetFarmhandsManageTime { get; set; } = true;
+
     /// <summary>The keyboard bindings used to control the flow of time. See available keys at <a href="https://msdn.microsoft.com/en-us/library/microsoft.xna.framework.input.keys.aspx" />.</summary>
     public ModControlsConfig Keys { get; set; } = new();
 
@@ -30,16 +35,23 @@ internal class ModConfig
     *********/
     /// <summary>Get whether time should be frozen at a given location.</summary>
     /// <param name="location">The game location.</param>
-    public bool ShouldFreeze(GameLocation location)
+    public bool ShouldFreeze(GameLocation? location)
     {
         return this.FreezeTime.ShouldFreeze(location);
     }
 
-    /// <summary>Get whether the time should be frozen at a given time of day.</summary>
+    /// <summary>Get whether the time should be frozen at a given time of day based on the <see cref="ModFreezeTimeConfig.AnywhereAtTime"/> option.</summary>
     /// <param name="time">The time of day in 24-hour military format (e.g. 1600 for 8pm).</param>
     public bool ShouldFreeze(int time)
     {
         return time >= this.FreezeTime.AnywhereAtTime;
+    }
+
+    /// <summary>Get whether the time should be frozen at a given time of day based on the <see cref="ModFreezeTimeConfig.PassOut"/> option.</summary>
+    /// <param name="time">The time of day in 24-hour military format (e.g. 1600 for 8pm).</param>
+    public bool ShouldFreezeBeforePassingOut(int time)
+    {
+        return time >= 2550 && this.FreezeTime.PassOut;
     }
 
     /// <summary>Get whether time settings should be applied on a given day.</summary>
@@ -52,7 +64,7 @@ internal class ModConfig
 
     /// <summary>Get the number of milliseconds per minute to apply for a location.</summary>
     /// <param name="location">The game location.</param>
-    public int GetMillisecondsPerMinute(GameLocation location)
+    public int GetMillisecondsPerMinute(GameLocation? location)
     {
         return (int)(this.SecondsPerMinute.GetSecondsPerMinute(location) * 1000);
     }
@@ -64,10 +76,13 @@ internal class ModConfig
     /// <summary>The method called after the config file is deserialized.</summary>
     /// <param name="context">The deserialization context.</param>
     [OnDeserialized]
+    [SuppressMessage("ReSharper", "NullCoalescingConditionIsAlwaysNotNullAccordingToAPIContract", Justification = SuppressReasons.ValidatesNullability)]
+    [SuppressMessage("ReSharper", "UnusedMember.Local", Justification = SuppressReasons.UsedViaReflection)]
+    [SuppressMessage("ReSharper", "UnusedParameter.Local", Justification = SuppressReasons.UsedViaReflection)]
     private void OnDeserializedMethod(StreamingContext context)
     {
-        this.SecondsPerMinute ??= new();
-        this.FreezeTime ??= new();
-        this.Keys ??= new();
+        this.SecondsPerMinute ??= new ModSecondsPerMinuteConfig();
+        this.FreezeTime ??= new ModFreezeTimeConfig();
+        this.Keys ??= new ModControlsConfig();
     }
 }

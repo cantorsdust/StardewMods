@@ -1,6 +1,18 @@
 ﻿﻿[← back to readme](README.md)
 
 # Release notes
+## 2.8.0
+Released 11 September 2025 for SMAPI 4.1.10 or later. Updated by Pathoschild.
+
+* Farmhands in multiplayer can now manage time too (thanks to collaboration with osugregor!).  
+  _The main player can disable that in the mod options if needed._
+* Added 'freeze time before 2am' option (thanks to MickeyMik!).
+* Manual unfreezes now work in a more intuitive way (thanks to MickeyMik!).  
+  _When you manually unfreeze time, that now only applies for the current freeze reason. For example, if you unfreeze time after a freeze-at-time and then move to a location where time should be frozen, time will correctly re-freeze since you overrode freeze-at-time but not freeze-at-location._
+* Improved the 'freeze time at' config UI.  
+  _It now increments in 10-minute intervals, doesn't show invalid times, and formats the displayed time._
+* Improved translations. Thanks to SummerFleur2997 (updated Chinese)!
+
 ## 2.7.10
 Released 11 January 2025 for SMAPI 4.1.10 or later. Updated by Pathoschild.
 
