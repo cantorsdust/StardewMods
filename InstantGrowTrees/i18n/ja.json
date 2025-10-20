@@ -1,0 +1,24 @@
+{
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    // fruit trees section
+    "config.fruit-trees": "果樹",
+    "config.fruit-trees.instantly-age.name": "瞬時に熟成",
+    "config.fruit-trees.instantly-age.desc": "果樹が瞬時にイリジウム品質に熟成する。",
+    "config.fruit-trees.instantly-grow.name": "瞬時に成長",
+    "config.fruit-trees.instantly-grow.desc": "果樹が一夜で完全に成長する。",
+    "config.fruit-trees.instantly-grow-in-winter.name": "冬でも成長",
+    "config.fruit-trees.instantly-grow-in-winter.desc": "果樹は冬でも瞬時に成長する（「瞬時に成長」が有効の場合）。",
+    "config.fruit-trees.instantly-grow-when-invalid.name": "成長を阻害されない",
+    "config.fruit-trees.instantly-grow-when-invalid.desc": "果樹が通常は成長しない場合（果樹の周りに邪魔なものがある場合）でも、即座に成長する。",
+
+    // non-fruit trees section
+    "config.trees": "果樹以外の樹木",
+    "config.trees.instantly-grow.name": "瞬時に成長",
+    "config.trees.instantly-grow.desc": "果樹以外の樹木で一夜で完全に成長する。",
+    "config.trees.instantly-grow-in-winter.name": "冬でも成長",
+    "config.trees.instantly-grow-in-winter.desc": "果樹以外の樹木が冬でも瞬時に成長する（「瞬時に成長」が有効の場合）。",
+    "config.trees.instantly-grow-when-invalid.name": "成長を阻害されない",
+    "config.trees.instantly-grow-when-invalid.desc": "果樹以外の樹木は通常は成長しない場合（樹木の周りに邪魔なものがある場合）でも、即座に成長する。"
+}
