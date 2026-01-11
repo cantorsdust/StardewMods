@@ -1,63 +1,16 @@
-﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.0.32014.148
-MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "root", "root", "{F5587F0D-F334-41FB-8399-73D1EA59D810}"
-	ProjectSection(SolutionItems) = preProject
-		.editorconfig = .editorconfig
-		.gitattributes = .gitattributes
-		.gitignore = .gitignore
-		Directory.Build.props = Directory.Build.props
-		Directory.Packages.props = Directory.Packages.props
-		LICENSE = LICENSE
-		README.md = README.md
-	EndProjectSection
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AllProfessions", "AllProfessions\AllProfessions.csproj", "{61B4E7B9-67AE-4505-8B79-53AA6998BC06}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InstantGrowTrees", "InstantGrowTrees\InstantGrowTrees.csproj", "{D136C634-758D-4506-92F2-66F69AC9E9AF}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RecatchLegendaryFish", "RecatchLegendaryFish\RecatchLegendaryFish.csproj", "{30501CC8-BACF-4407-87C2-3C14144F0AB2}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimeSpeed", "TimeSpeed\TimeSpeed.csproj", "{2F957F88-C55D-4EE1-AEB5-9A403076C5A9}"
-EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "_Common", "_Common\_Common.shproj", "{746C7502-784C-40D9-BB76-B0D9DF5E4049}"
-EndProject
-Global
-	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		_Common\_Common.projitems*{2f957f88-c55d-4ee1-aeb5-9a403076c5a9}*SharedItemsImports = 5
-		_Common\_Common.projitems*{30501cc8-bacf-4407-87c2-3c14144f0ab2}*SharedItemsImports = 5
-		_Common\_Common.projitems*{61b4e7b9-67ae-4505-8b79-53aa6998bc06}*SharedItemsImports = 5
-		_Common\_Common.projitems*{746c7502-784c-40d9-bb76-b0d9df5e4049}*SharedItemsImports = 13
-		_Common\_Common.projitems*{d136c634-758d-4506-92f2-66f69ac9e9af}*SharedItemsImports = 5
-	EndGlobalSection
-	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|Any CPU = Debug|Any CPU
-		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{61B4E7B9-67AE-4505-8B79-53AA6998BC06}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{61B4E7B9-67AE-4505-8B79-53AA6998BC06}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{61B4E7B9-67AE-4505-8B79-53AA6998BC06}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{61B4E7B9-67AE-4505-8B79-53AA6998BC06}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D136C634-758D-4506-92F2-66F69AC9E9AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D136C634-758D-4506-92F2-66F69AC9E9AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D136C634-758D-4506-92F2-66F69AC9E9AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D136C634-758D-4506-92F2-66F69AC9E9AF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{30501CC8-BACF-4407-87C2-3C14144F0AB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{30501CC8-BACF-4407-87C2-3C14144F0AB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{30501CC8-BACF-4407-87C2-3C14144F0AB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{30501CC8-BACF-4407-87C2-3C14144F0AB2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2F957F88-C55D-4EE1-AEB5-9A403076C5A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2F957F88-C55D-4EE1-AEB5-9A403076C5A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2F957F88-C55D-4EE1-AEB5-9A403076C5A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2F957F88-C55D-4EE1-AEB5-9A403076C5A9}.Release|Any CPU.Build.0 = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {6137C2AA-6652-4A74-885B-7A0ADC70765E}
-	EndGlobalSection
-EndGlobal
+<Solution>
+  <Folder Name="/root/">
+    <File Path=".editorconfig" />
+    <File Path=".gitattributes" />
+    <File Path=".gitignore" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+    <File Path="LICENSE" />
+    <File Path="README.md" />
+  </Folder>
+  <Project Path="AllProfessions/AllProfessions.csproj" />
+  <Project Path="InstantGrowTrees/InstantGrowTrees.csproj" />
+  <Project Path="RecatchLegendaryFish/RecatchLegendaryFish.csproj" />
+  <Project Path="TimeSpeed/TimeSpeed.csproj" />
+  <Project Path="_Common/_Common.shproj" />
+</Solution>
