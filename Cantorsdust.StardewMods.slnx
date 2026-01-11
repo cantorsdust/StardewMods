@@ -1,0 +1,16 @@
+<Solution>
+  <Folder Name="/root/">
+    <File Path=".editorconfig" />
+    <File Path=".gitattributes" />
+    <File Path=".gitignore" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+    <File Path="LICENSE" />
+    <File Path="README.md" />
+  </Folder>
+  <Project Path="AllProfessions/AllProfessions.csproj" />
+  <Project Path="InstantGrowTrees/InstantGrowTrees.csproj" />
+  <Project Path="RecatchLegendaryFish/RecatchLegendaryFish.csproj" />
+  <Project Path="TimeSpeed/TimeSpeed.csproj" />
+  <Project Path="_Common/_Common.shproj" />
+</Solution>
