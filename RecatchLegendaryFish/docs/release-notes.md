@@ -1,7 +1,9 @@
 ﻿﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.9.1
+Released 16 January 2026 for SMAPI 4.1.10 or later. Updated by Pathoschild.
+
 * Fixed optional catch limit not applied correctly.
 
 ## 1.9.0
