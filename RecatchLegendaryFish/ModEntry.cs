@@ -59,7 +59,7 @@ internal class ModEntry : Mod
     /// <inheritdoc cref="IContentEvents.AssetRequested"/>
     private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
     {
-        if (this.IsEnabled && e.Name.IsEquivalentTo("Data/Locations"))
+        if (this.IsEnabled && e.Name.IsEquivalentTo("Data/Locations") && Game1.player is not null)
         {
             Dictionary<string, int> lastCaughtPerFish = this.LastCaughtPerFish.Value;
             int? startOfLimitPeriod = this.GetStartOfLimitPeriod()?.TotalDays;

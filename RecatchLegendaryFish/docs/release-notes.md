@@ -1,6 +1,11 @@
 ﻿﻿[← back to readme](README.md)
 
 # Release notes
+## 1.9.2
+Released 16 January 2026 for SMAPI 4.1.10 or later. Updated by Pathoschild.
+
+* Fixed error on startup in some cases.
+
 ## 1.9.1
 Released 16 January 2026 for SMAPI 4.1.10 or later. Updated by Pathoschild.
 
