@@ -94,7 +94,11 @@ internal class ModEntry : Mod
                                 if (qualifiedId != null)
                                 {
                                     bool caughtThisPeriod = lastCaughtPerFish.TryGetValue(qualifiedId, out int lastCaught) && lastCaught >= startOfLimitPeriod;
-                                    fish.CatchLimit = caughtThisPeriod ? 0 : 1;
+                                    if (!caughtThisPeriod)
+                                    {
+                                        int previouslyCaught = Game1.player.fishCaught.GetValueOrDefault(qualifiedId)?[0] ?? 0;
+                                        fish.CatchLimit = previouslyCaught + 1;
+                                    }
                                 }
                             }
                         }
