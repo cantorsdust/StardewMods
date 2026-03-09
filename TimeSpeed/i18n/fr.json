@@ -3,86 +3,84 @@
     ** In-game messages
     *********/
     // changed manually
-    "message.config-reloaded": "Le temps s'écoule désormais autrement...",
-    "message.speed-changed": "10 minutes semblent se passer en {{seconds}} secondes.",
-    "message.time-stopped": "Time has stopped...", // TODO
+    "message.config-reloaded": "L’écoulement du temps a été modifié...",
+    "message.speed-changed": "10 minutes s’écoulent désormais en {{seconds}} secondes.",
+    "message.time-stopped": "Le temps s’est arrêté...",
     "message.time-resumed": "Le temps reprend son cours...",
 
     // changed based on time
-    "message.on-time-change.time-stopped": "Le temps s'arrête soudainement...",
+    "message.on-time-change.time-stopped": "Le temps s’arrête soudainement...",
 
     // changed based on location
-    "message.on-location-change.time-stopped-globally": "Le temps semble arrêté partout...",
+    "message.on-location-change.time-stopped-globally": "Le temps semble figé partout...",
     "message.on-location-change.time-stopped-here": "Le temps semble figé ici...",
-    "message.on-location-change.time-speed-here": "Ici, 10 minutes semblent se passer en {{seconds}} secondes.",
+    "message.on-location-change.time-speed-here": "Ici, 10 minutes s’écoulent en {{seconds}} secondes.",
 
     // multiplayer messages
-    // TODO
-    "message.host-missing-mod": "You can't change time because the main player doesn't have TimeSpeed installed.",
-    "message.host-access-denied": "You can't change time because the main player doesn't allow that.",
+    "message.host-missing-mod": "Impossible de modifier le temps : le joueur hôte n’a pas installé TimeSpeed.",
+    "message.host-access-denied": "Impossible de modifier le temps : le joueur hôte ne l’autorise pas.",
 
 
     /*********
     ** Generic Mod Config Menu UI
     *********/
     // warnings
-    "config.farmhand-warning": "The host player's options apply for this save. You can still edit the options below, but only the controls will do anything as a farmhand.", // TODO
+    "config.farmhand-warning": "Les options du joueur hôte s’appliquent à cette sauvegarde. Vous pouvez modifier les options ci-dessous, mais seules les commandes auront un effet si vous êtes ouvrier agricole.",
 
     // general options
     "config.general-options": "Options générales",
-    "config.enable-on-festival-days.name": "Activer les jours de fête",
-    "config.enable-on-festival-days.desc": "Si l'écoulement du temps doit être modifiée les jours de fête.",
-    "config.location-notify.name": "Rappeler l'état sur transfert",
-    "config.location-notify.desc": "Si un message à propos des paramètres du temps doit être affiché lorsque tu arrives dans un nouvel endroit.",
+    "config.enable-on-festival-days.name": "Activer pendant les fêtes",
+    "config.enable-on-festival-days.desc": "Détermine si la modification de l’écoulement du temps s’applique aussi les jours de fête.",
+    "config.location-notify.name": "Afficher l’état lors d’un changement de lieu",
+    "config.location-notify.desc": "Indique si un message concernant les paramètres du temps doit s’afficher à l’arrivée dans un nouvel endroit.",
 
     // seconds per minute section
     "config.seconds-per-minute": "Secondes par minute",
-    "config.indoors-speed.name": "À l'intérieur",
-    "config.indoors-speed.desc": "Le nombre de secondes par minute pour le jeu lorsqu'on est à l'intérieur.",
-    "config.outdoors-speed.name": "À l'extérieur",
-    "config.outdoors-speed.desc": "Le nombre de secondes par minute pour le jeu lorsqu'on est à l'extérieur.",
-    "config.mine-speed.name": "Mines",
-    "config.mine-speed.desc": "Le nombre de secondes par minute pour le jeu lorsqu'on est dans les mines.",
-    "config.skull-cavern-speed.name": "Caverne du crâne",
-    "config.skull-cavern-speed.desc": "Le nombre de secondes par minute pour le jeu lorsqu'on est dans la caverne du crâne.",
-    "config.volcano-dungeon-speed.name": "Donjon du volcan",
-    "config.volcano-dungeon-speed.desc": "Le nombre de secondes par minute pour le jeu lorsqu'on est dans le donjon du volcan.",
+    "config.indoors-speed.name": "À l’intérieur",
+    "config.indoors-speed.desc": "Nombre de secondes correspondant à 10 minutes en jeu lorsque vous êtes à l’intérieur.",
+    "config.outdoors-speed.name": "À l’extérieur",
+    "config.outdoors-speed.desc": "Nombre de secondes correspondant à 10 minutes en jeu lorsque vous êtes à l’extérieur.",
+    "config.mine-speed.name": "Les Mines",
+    "config.mine-speed.desc": "Nombre de secondes correspondant à 10 minutes en jeu lorsque vous êtes dans les Mines.",
+    "config.skull-cavern-speed.name": "Caverne du Crâne",
+    "config.skull-cavern-speed.desc": "Nombre de secondes correspondant à 10 minutes en jeu lorsque vous êtes dans la Caverne du Crâne.",
+    "config.volcano-dungeon-speed.name": "Donjon du Volcan",
+    "config.volcano-dungeon-speed.desc": "Nombre de secondes correspondant à 10 minutes en jeu lorsque vous êtes dans le Donjon du Volcan.",
 
     // freeze time section
     "config.freeze-time": "Figer le temps",
     "config.anywhere-at-time.name": "Figer le temps à",
-    "config.anywhere-at-time.desc": "L'heure à laquelle le temps sera figé partout. Exprimé en temps militaire au format 24 heures, de 600 (6h00) à 2400 (minuit) et 2600 (2h00). Assigner à 2600 pour désactiver.",
-    "config.freeze-before-passing-out.name": "Freeze time before 2am", // TODO
-    "config.freeze-before-passing-out.desc": "Whether to freeze time everywhere before players pass out (i.e. at 1:50am). This is in addition to the '{{freezeTimeAt}}' option.", // TODO
-    "config.freeze-time-indoors.name": "À l'intérieur",
-    "config.freeze-time-indoors.desc": "S'il faut figer le temps à l'intérieur.",
-    "config.freeze-time-outdoors.name": "À l'extérieur",
-    "config.freeze-time-outdoors.desc": "S'il faut figer le temps à l'extérieur.",
-    "config.freeze-time-mine.name": "Mines",
-    "config.freeze-time-mine.desc": "S'il faut figer le temps dans les mines.",
-    "config.freeze-time-skull-cavern.name": "Caverne du crâne",
-    "config.freeze-time-skull-cavern.desc": "S'il faut figer le temps dans la caverne du crâne.",
-    "config.freeze-time-volcano-dungeon.name": "Donjon du volcan",
-    "config.freeze-time-volcano-dungeon.desc": "S'il faut figer le temps dans le donjon du volcan.",
-    "config.freeze-time-freeze-names.name": "Nom des endroits figés",
-    "config.freeze-time-freeze-names.desc": "Les noms d'endroits où le temps devrait être figé. Les noms des endroits peuvent être consultés intrajeu en utilisant le mod Debug Mode. Plusieurs endroits peuvent être spécifiés en les séparant par des virgules.",
-    "config.freeze-time-dont-freeze-names.name": "Nom des endroits non figés",
-    "config.freeze-time-dont-freeze-names.desc": "Les noms d'endroits où le temps ne devrait pas être figé, en dépit des paramètres précédents. Les noms des endroits peuvent être consultés intrajeu en utilisant le mod Debug Mode. Plusieurs endroits peuvent être spécifiés en les séparant par des virgules.",
+    "config.anywhere-at-time.desc": "Heure à laquelle le temps sera figé partout. Format 24 heures (heure militaire), de 600 (6h00) à 2400 (minuit) ou 2600 (2h00). Définir sur 2600 pour désactiver.",
+    "config.freeze-before-passing-out.name": "Figer le temps avant 2h00",
+    "config.freeze-before-passing-out.desc": "Détermine si le temps doit être figé partout avant que les joueurs ne s’évanouissent (c’est-à-dire à 1h50). Cette option s’ajoute au paramètre « {{freezeTimeAt}} ».",
+    "config.freeze-time-indoors.name": "À l’intérieur",
+    "config.freeze-time-indoors.desc": "Détermine si le temps doit être figé à l’intérieur.",
+    "config.freeze-time-outdoors.name": "À l’extérieur",
+    "config.freeze-time-outdoors.desc": "Détermine si le temps doit être figé à l’extérieur.",
+    "config.freeze-time-mine.name": "Les Mines",
+    "config.freeze-time-mine.desc": "Détermine si le temps doit être figé dans les Mines.",
+    "config.freeze-time-skull-cavern.name": "Caverne du Crâne",
+    "config.freeze-time-skull-cavern.desc": "Détermine si le temps doit être figé dans la Caverne du Crâne.",
+    "config.freeze-time-volcano-dungeon.name": "Donjon du Volcan",
+    "config.freeze-time-volcano-dungeon.desc": "Détermine si le temps doit être figé dans le Donjon du Volcan.",
+    "config.freeze-time-freeze-names.name": "Lieux où figer le temps",
+    "config.freeze-time-freeze-names.desc": "Liste des lieux où le temps doit être figé. Les noms internes des lieux peuvent être consultés en jeu à l’aide du mod Debug Mode. Séparez plusieurs lieux par des virgules.",
+    "config.freeze-time-dont-freeze-names.name": "Lieux à exclure",
+    "config.freeze-time-dont-freeze-names.desc": "Liste des lieux où le temps ne doit pas être figé, malgré les paramètres précédents. Les noms internes des lieux peuvent être consultés en jeu à l’aide du mod Debug Mode. Séparez plusieurs lieux par des virgules.",
 
     // multiplayer options
-    // TODO
-    "config.multiplayer": "Multiplayer",
-    "config.let-farmhands-manage-time.name": "Let farmhands manage time",
-    "config.let-farmhands-manage-time.description": "When you're hosting a save in multiplayer mode, whether other players can freeze or change the time speed if they have the mod installed too.",
+    "config.multiplayer": "Multijoueur",
+    "config.let-farmhands-manage-time.name": "Autoriser les ouvriers agricoles à gérer le temps",
+    "config.let-farmhands-manage-time.description": "Lorsque vous hébergez une partie en multijoueur, permet aux autres joueurs ayant également le mod installé de figer le temps ou d’en modifier la vitesse.",
 
     // controls
     "config.controls": "Commandes",
-    "config.freeze-time-key.name": "Figer le temps",
-    "config.freeze-time-key.desc": "La touche qui fige ou défige le temps. Le figeage du temps restera en vigueur jusqu'à ce que tu le défiges. Le défigeage du temps restera en vigueur jusqu'à ce que tu arrives dans un nouvel endroit où l'écoulement du temps est paramétré.",
+    "config.freeze-time-key.name": "Figer / reprendre le temps",
+    "config.freeze-time-key.desc": "Touche permettant de figer ou de relancer le temps. Si le temps est figé, il le restera jusqu’à nouvelle pression. S’il est relancé manuellement, ce réglage restera actif jusqu’à l’entrée dans un lieu ayant ses propres paramètres.",
     "config.slow-time-key.name": "Ralentir le temps",
-    "config.slow-time-key.desc": "La touche qui ralentit le temps d'une seconde pour 10 minutes dans le jeu. Combiner avec Ctrl pour 100 secondes, Maj pour 10 secondes, ou Alt pour 0,1 secondes.",
+    "config.slow-time-key.desc": "Touche permettant d’augmenter d’une seconde la durée de 10 minutes en jeu. Combinez avec Ctrl pour 100 secondes, Maj pour 10 secondes ou Alt pour 0,1 seconde.",
     "config.speed-up-time-key.name": "Accélérer le temps",
-    "config.speed-up-time-key.desc": "La touche qui accélère le temps d'une seconde pour 10 minutes dans le jeu. Combiner avec Ctrl pour 100 secondes, Maj pour 10 secondes, ou Alt pour 0,1 secondes.",
+    "config.speed-up-time-key.desc": "Touche permettant de réduire d’une seconde la durée de 10 minutes en jeu. Combinez avec Ctrl pour 100 secondes, Maj pour 10 secondes ou Alt pour 0,1 seconde.",
     "config.reload-key.name": "Recharger la configuration",
-    "config.reload-key.desc": "La touche qui recharge tous les paramètres depuis le fichier de configuration et qui les applique immédiatement. Le temps restera figé s'il était figé précédemment via le raccourci."
+    "config.reload-key.desc": "Touche permettant de recharger immédiatement tous les paramètres depuis le fichier de configuration. Si le temps était figé via un raccourci, il restera figé."
 }

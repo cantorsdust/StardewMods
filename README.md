@@ -27,7 +27,7 @@ on the wiki for help contributing translations.
 &nbsp;     | All Professions                  | Instant Grow Trees                 | Recatch Legendary Fish                 | TimeSpeed
 :--------- | :------------------------------- | :--------------------------------- | :------------------------------------- | :--------------------------
 Chinese    | [❑](AllProfessions/i18n)         | [✓](InstantGrowTrees/i18n/zh.json) | [↻](RecatchLegendaryFish/i18n/zh.json) | [↻](TimeSpeed/i18n/zh.json)
-French     | [❑](AllProfessions/i18n)         | [❑](InstantGrowTrees/i18n)         | [❑](RecatchLegendaryFish/i18n)         | [↻](TimeSpeed/i18n/fr.json)
+French     | [❑](AllProfessions/i18n)         | [❑](InstantGrowTrees/i18n)         | [❑](RecatchLegendaryFish/i18n)         | [✓](TimeSpeed/i18n/fr.json)
 German     | [❑](AllProfessions/i18n)         | [❑](InstantGrowTrees/i18n)         | [❑](RecatchLegendaryFish/i18n)         | [↻](TimeSpeed/i18n/de.json)
 Hungarian  | [✓](AllProfessions/i18n/hu.json) | [❑](InstantGrowTrees/i18n)         | [❑](RecatchLegendaryFish/i18n)         | [❑](TimeSpeed/i18n)
 Italian    | [❑](AllProfessions/i18n)         | [❑](InstantGrowTrees/i18n)         | [❑](RecatchLegendaryFish/i18n)         | [↻](TimeSpeed/i18n/it.json)
