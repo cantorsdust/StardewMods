@@ -1,8 +1,10 @@
+using System.Diagnostics.CodeAnalysis;
 using StardewValley;
 
 namespace AllProfessions.Framework;
 
 /// <summary>A player profession.</summary>
+[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Values are used in deserialized data.")]
 internal enum Profession
 {
     /***
