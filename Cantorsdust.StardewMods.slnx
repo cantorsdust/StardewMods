@@ -8,6 +8,10 @@
     <File Path="LICENSE" />
     <File Path="README.md" />
   </Folder>
+  <Folder Name="/root/.github/" />
+  <Folder Name="/root/.github/workflows/">
+    <File Path=".github/workflows/build.yml" />
+  </Folder>
   <Project Path="AllProfessions/AllProfessions.csproj" />
   <Project Path="InstantGrowTrees/InstantGrowTrees.csproj" />
   <Project Path="RecatchLegendaryFish/RecatchLegendaryFish.csproj" />

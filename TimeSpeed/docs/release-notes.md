@@ -2,6 +2,8 @@
 
 # Release notes
 ## Upcoming release
+* TimeSpeed downloads are now created via [automated and attested builds](https://www.patreon.com/posts/automated-builds-148417912).  
+  _This guarantees that the download only contains what's in the public source code and hasn't been tampered with._
 * Improved translations. Thanks to vin163 (updated French)!
 
 ## 2.8.0
