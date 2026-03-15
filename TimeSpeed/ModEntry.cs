@@ -42,14 +42,11 @@ internal class ModEntry : Mod
     /// <summary>Whether the flow of time should be adjusted.</summary>
     private bool AdjustTime;
 
-    /// <summary>Backing field for <see cref="TickInterval"/>.</summary>
-    private int _tickInterval;
-
     /// <summary>The number of milliseconds per 10-game-minutes to apply.</summary>
     private int TickInterval
     {
-        get => this._tickInterval;
-        set => this._tickInterval = Math.Max(value, 0);
+        get;
+        set => field = Math.Max(value, 0);
     }
 
 
