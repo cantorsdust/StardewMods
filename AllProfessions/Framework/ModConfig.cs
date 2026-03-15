@@ -15,7 +15,7 @@ internal class ModConfig
     ** Accessors
     *********/
     /// <summary>The profession names or IDs which shouldn't be added.</summary>
-    public HashSet<string> IgnoreProfessions { get; set; } = new();
+    public HashSet<string> IgnoreProfessions { get; set; } = [];
 
 
     /*********
@@ -69,7 +69,7 @@ internal class ModConfig
     [SuppressMessage("ReSharper", "UnusedParameter.Local", Justification = SuppressReasons.UsedViaReflection)]
     private void OnDeserializedMethod(StreamingContext context)
     {
-        this.IgnoreProfessions = new(this.IgnoreProfessions ?? new(), StringComparer.OrdinalIgnoreCase);
+        this.IgnoreProfessions = new(this.IgnoreProfessions ?? [], StringComparer.OrdinalIgnoreCase);
         this.IgnoreProfessions.Remove(null!);
     }
 }

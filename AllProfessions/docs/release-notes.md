@@ -1,6 +1,12 @@
 ﻿﻿[← back to readme](README.md)
 
 # Release notes
+## 1.5.9
+Released 15 March 2026 for SMAPI 4.1.2 or later. Updated by Pathoschild.
+
+* All Professions downloads are now created via [automated and attested builds](https://www.patreon.com/posts/automated-builds-148417912).  
+  _This guarantees that the download only contains what's in the public source code and hasn't been tampered with._
+
 ## 1.5.8
 Released 11 September 2025 for SMAPI 4.1.2 or later. Updated by Pathoschild.
 

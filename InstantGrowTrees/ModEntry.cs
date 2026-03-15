@@ -145,7 +145,7 @@ internal class ModEntry : Mod
     {
         FruitTreeConfig config = this.Config.FruitTrees;
 
-        // skip if can't be aged
+        // skip if it can't be aged
         if (!config.InstantlyAge || tree.growthStage.Value < FruitTree.treeStage || tree.daysUntilMature.Value <= -ModEntry.FruitTreeIridiumDays)
             return;
 

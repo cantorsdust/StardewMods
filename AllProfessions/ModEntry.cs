@@ -121,7 +121,7 @@ internal class ModEntry : Mod
     private void AddMissingProfessions()
     {
         // get missing professions
-        List<Profession> expectedProfessions = new List<Profession>();
+        List<Profession> expectedProfessions = [];
         foreach (ModDataProfessions entry in this.ProfessionMap)
         {
             if (Game1.player.getEffectiveSkillLevel((int)entry.Skill) >= entry.Level)
