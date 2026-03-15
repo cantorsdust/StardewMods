@@ -56,13 +56,13 @@ internal enum Profession
     /// <summary>The fisher profession for the fishing skill.</summary>
     Fisher = Farmer.fisher,
 
-    /// <summary>The mariner profession for the fishing skill.</summary>
+    /// <inheritdoc cref="Farmer.baitmaster" />
     Mariner = Farmer.baitmaster, // game's constant name is confusing
 
     /// <summary>The pirate profession for the fishing skill.</summary>
     Pirate = Farmer.pirate,
 
-    /// <summary>The luremaster profession for the fishing skill.</summary>
+    /// <inheritdoc cref="Farmer.mariner" />
     Luremaster = Farmer.mariner, // game's constant name is confusing
 
     /// <summary>The trapper profession for the fishing skill.</summary>
